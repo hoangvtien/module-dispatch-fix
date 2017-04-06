@@ -20,12 +20,12 @@ function nv_FixWeightCat($parentid = 0)
 {
     global $db, $module_data;
 
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $parentid . " ORDER BY weight ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $parentid . " ORDER BY weight ASC";
     $result = $db->query($sql);
     $weight = 0;
     while ($row = $result->fetch()) {
         $weight++;
-        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $weight . " WHERE id=" . $row['id']);
+        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE id=" . $row['id']);
     }
 }
 
@@ -35,24 +35,22 @@ function nv_FixWeightCat($parentid = 0)
  * @param mixed $catid
  * @return
  */
-function nv_del_cat($deid)
+function nv_del_cat($catid)
 {
     global $db, $module_data, $admin_info;
 
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE from_depid=" . $deid;
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE catid=" . $catid;
     $db->query($sql);
 
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE deid=" . $deid;
-    $db->query($sql);
-
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $deid;
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $catid;
     $result = $db->query($sql);
     while (list ($id) = $result->fetch(3)) {
         nv_del_cat($id);
     }
 
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $catid;
     $db->query($sql);
+
     nv_insert_logs(NV_LANG_DATA, $module_data, "delete dispatch", '', $admin_info['userid'], '');
 }
 
@@ -61,70 +59,68 @@ $error = "";
 
 //them chu de
 if ($nv_Request->isset_request('add', 'get')) {
-    $page_title = $lang_module['de_add'];
+    $page_title = $lang_module['fields_add'];
     $is_error = false;
     if ($nv_Request->isset_request('submit', 'post')) {
         $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
         $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
-        $array['head'] = $nv_Request->get_title('head', 'post', '', 1);
         $array['introduction'] = $nv_Request->get_title('introduction', 'post', '');
         $array['alias'] = $nv_Request->get_title('alias', 'post', '');
         $array['alias'] = ($array['alias'] == "") ? change_alias($array['title']) : change_alias($array['alias']);
 
         if (empty($array['title'])) {
-            $error = $lang_module['de_err_notitle'];
+            $error = $lang_module['cat_err_notitle'];
             $is_error = true;
         } else {
             if (!empty($array['parentid'])) {
-                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $array['parentid'];
+                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $array['parentid'];
                 $result = $db->query($sql);
                 $count = $result->fetchColumn();
 
                 if (!$count) {
-                    $error = $lang_module['de_err_noexist'];
+                    $error = $lang_module['cat_err_noexist'];
                     $is_error = true;
                 }
             }
 
             if (!$is_error) {
-                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE alias=" . $db->quote($array['alias']);
+                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE alias=" . $db->quote($array['alias']);
                 $result = $db->query($sql);
                 $count = $result->fetchColumn();
 
                 if ($count) {
-                    $error = $lang_module['de_err_exist'];
+                    $error = $lang_module['cat_err_exist'];
                     $is_error = true;
                 }
             }
         }
 
         if (!$is_error) {
-            $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $array['parentid'];
+            $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $array['parentid'];
             $result = $db->query($sql);
             $new_weight = $result->fetchColumn();
             $new_weight = (int) $new_weight;
             $new_weight++;
 
-            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_departments VALUES (
-            NULL,
-            " . $array['parentid'] . ",
-            " . $db->quote($array['alias']) . ",
-            " . $db->quote($array['title']) . ",
-            " . $db->quote($array['introduction']) . ",
-            " . $db->quote($array['head']) . ",
-            " . NV_CURRENTTIME . ",
-            " . $new_weight . "
-            )";
+            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat VALUES (
+                NULL,
+                " . $array['parentid'] . ",
+                " . $db->quote($array['alias']) . ",
+                " . $db->quote($array['title']) . ",
+                " . $db->quote($array['introduction']) . ",
+                " . NV_CURRENTTIME . ",
+                " . $new_weight . ",
+                1)";
 
-            $deid = $db->insert_id($sql);
+            $catid = $db->insert_id($sql);
 
-            if (!$deid) {
-                $error = $lang_module['de_err_save'];
+            if (!$catid) {
+                $error = $lang_module['cat_err_save'];
                 $is_error = true;
             } else {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['de_add'], $array['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['cat_add'], $array['title'], $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
-                Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
+                Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields");
                 exit();
             }
         }
@@ -132,20 +128,19 @@ if ($nv_Request->isset_request('add', 'get')) {
         $array['parentid'] = 0;
         $array['title'] = "";
         $array['alias'] = "";
-        $array['head'] = "";
         $array['description'] = "";
     }
 
-    $listdes = array(
+    $listcats = array(
         array(
             'id' => 0,
             'name' => $lang_module['cat_maincat'],
             'selected' => ""
         )
     );
-    $listdes = $listdes + nv_listdes($array['parentid']);
+    $listcats = $listcats + nv_listcats($array['parentid']);
 
-    $xtpl = new XTemplate("de_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+    $xtpl = new XTemplate("fields_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;add=1");
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('DATA', $array);
@@ -155,7 +150,7 @@ if ($nv_Request->isset_request('add', 'get')) {
         $xtpl->parse('main.error');
     }
 
-    foreach ($listdes as $cat) {
+    foreach ($listcats as $cat) {
         $xtpl->assign('LISTCATS', $cat);
         $xtpl->parse('main.parentid');
     }
@@ -172,21 +167,21 @@ if ($nv_Request->isset_request('add', 'get')) {
 
 //Sua chu de
 if ($nv_Request->isset_request('edit', 'get')) {
-    $page_title = $lang_module['de_edit'];
+    $page_title = $lang_module['cat_edit'];
 
-    $deid = $nv_Request->get_int('deid', 'get', 0);
+    $catid = $nv_Request->get_int('catid', 'get', 0);
 
-    if (empty($deid)) {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
+    if (empty($catid)) {
+        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields");
         exit();
     }
 
-    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $catid;
     $result = $db->query($sql);
     $numcat = $result->rowCount();
 
     if ($numcat != 1) {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
+        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields");
         exit();
     }
 
@@ -198,7 +193,6 @@ if ($nv_Request->isset_request('edit', 'get')) {
         $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
         $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
         $array['introduction'] = $nv_Request->get_title('introduction', 'post', '');
-        $array['head'] = $nv_Request->get_title('head', 'post', '', 1);
 
         $array['alias'] = $nv_Request->get_title('alias', 'post', '');
         $array['alias'] = ($array['alias'] == "") ? change_alias($array['title']) : change_alias($array['alias']);
@@ -208,22 +202,22 @@ if ($nv_Request->isset_request('edit', 'get')) {
             $is_error = true;
         } else {
             if (!empty($array['parentid'])) {
-                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $array['parentid'];
+                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $array['parentid'];
                 $result = $db->query($sql);
                 $count = $result->fetchColumn();
 
                 if (!$count) {
-                    $error = $lang_module['de_err_noexist'];
+                    $error = $lang_module['cat_err_noexist'];
                     $is_error = true;
                 }
             }
 
             if (!$is_error) {
-                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id!=" . $deid . " AND alias=" . $db->quote($array['alias']);
+                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id!=" . $catid . " AND alias=" . $db->quote($array['alias']);
                 $result = $db->query($sql);
                 $count = $result->fetchColumn();
                 if ($count) {
-                    $error = $lang_module['de_err_exist'];
+                    $error = $lang_module['cat_err_exist'];
                     $is_error = true;
                 }
             }
@@ -231,7 +225,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
 
         if (!$is_error) {
             if ($array['parentid'] != $row['parentid']) {
-                $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $array['parentid'];
+                $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $array['parentid'];
                 $result = $db->query($sql);
                 $new_weight = $result->fetchColumn();
                 $new_weight = (int) $new_weight;
@@ -240,19 +234,17 @@ if ($nv_Request->isset_request('edit', 'get')) {
                 $new_weight = $row['weight'];
             }
 
-            $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET
-            parentid=" . $array['parentid'] . ",
-            title=" . $db->quote($array['title']) . ",
-            alias=" . $db->quote($array['alias']) . ",
-            head=" . $db->quote($array['head']) . ",
-            introduction=" . $db->quote($array['introduction']) . ",
-            weight=" . $new_weight . "
-            WHERE id=" . $deid;
-
+            $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET
+                parentid=" . $array['parentid'] . ",
+                title=" . $db->quote($array['title']) . ",
+                alias=" . $db->quote($array['alias']) . ",
+                introduction=" . $db->quote($array['introduction']) . ",
+                weight=" . $new_weight . "
+                WHERE id=" . $catid;
             $result = $db->query($sql);
 
             if (!$result) {
-                $error = $lang_module['de_err_update'];
+                $error = $lang_module['cat_err_update'];
                 $is_error = true;
             } else {
                 if ($array['parentid'] != $row['parentid']) {
@@ -261,7 +253,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
 
                 $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['cat_edit'], $array['title'], $admin_info['userid']);
-                Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
+                Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields");
                 exit();
             }
         }
@@ -269,21 +261,20 @@ if ($nv_Request->isset_request('edit', 'get')) {
         $array['parentid'] = (int) $row['parentid'];
         $array['title'] = $row['title'];
         $array['alias'] = $row['alias'];
-        $array['head'] = $row['head'];
         $array['introduction'] = $row['introduction'];
     }
 
-    $listdes = array(
+    $listcats = array(
         array(
             'id' => 0,
             'name' => $lang_module['cat_maincat'],
             'selected' => ""
         )
     );
-    $listdes = $listdes + nv_listdes($array['parentid'], $deid);
+    $listcats = $listcats + nv_listcats($array['parentid'], $catid);
 
-    $xtpl = new XTemplate("de_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
-    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;deid=" . $deid);
+    $xtpl = new XTemplate("cat_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;catid=" . $catid);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('DATA', $array);
 
@@ -292,7 +283,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
         $xtpl->parse('main.error');
     }
 
-    foreach ($listdes as $cat) {
+    foreach ($listcats as $cat) {
         $xtpl->assign('LISTCATS', $cat);
         $xtpl->parse('main.parentid');
     }
@@ -311,13 +302,13 @@ if ($nv_Request->isset_request('edit', 'get')) {
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) die('Wrong URL');
 
-    $deid = $nv_Request->get_int('deid', 'post', 0);
+    $catid = $nv_Request->get_int('catid', 'post', 0);
 
-    if (empty($deid)) {
+    if (empty($catid)) {
         die('NO');
     }
 
-    $sql = "SELECT COUNT(*) AS count, parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
+    $sql = "SELECT COUNT(*) AS count, parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $catid;
     $result = $db->query($sql);
     list ($count, $parentid) = $result->fetch(3);
 
@@ -325,37 +316,38 @@ if ($nv_Request->isset_request('del', 'post')) {
         die('NO');
     }
 
-    nv_del_cat($deid);
+    nv_del_cat($catid);
     nv_FixWeightCat($parentid);
     $nv_Cache->delMod($module_name);
 
     die('OK');
 }
+
 //Chinh thu tu chu de
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) die('Wrong URL');
 
-    $deid = $nv_Request->get_int('deid', 'post', 0);
+    $catid = $nv_Request->get_int('catid', 'post', 0);
     $new = $nv_Request->get_int('new', 'post', 0);
 
-    if (empty($deid)) die('NO');
+    if (empty($catid)) die('NO');
 
-    $query = "SELECT parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
+    $query = "SELECT parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $catid;
     $result = $db->query($query);
     $numrows = $result->rowCount();
     if ($numrows != 1) die('NO');
     $parentid = $result->fetchColumn();
 
-    $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id!=" . $deid . " AND parentid=" . $parentid . " ORDER BY weight ASC";
+    $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id!=" . $catid . " AND parentid=" . $parentid . " ORDER BY weight ASC";
     $result = $db->query($query);
     $weight = 0;
     while ($row = $result->fetch()) {
         $weight++;
         if ($weight == $new) $weight++;
-        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $weight . " WHERE id=" . $row['id'];
+        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query($sql);
     }
-    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $new . " WHERE id=" . $deid;
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $new . " WHERE id=" . $catid;
     $db->query($sql);
 
     $nv_Cache->delMod($module_name);
@@ -363,32 +355,56 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     die('OK');
 }
 
-//Danh sach phong ban
-$page_title = $lang_module['de_list'];
+//Kich hoat - dinh chi
+if ($nv_Request->isset_request('changestatus', 'post')) {
+    if (!defined('NV_IS_AJAX')) die('Wrong URL');
+
+    $catid = $nv_Request->get_int('catid', 'post', 0);
+
+    if (empty($catid)) die('NO');
+
+    $query = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $catid;
+    $result = $db->query($query);
+    $numrows = $result->rowCount();
+    if ($numrows != 1) die('NO');
+
+    $status = $result->fetchColumn();
+    $status = $status ? 0 : 1;
+
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET status=" . $status . " WHERE id=" . $catid;
+    $db->query($sql);
+
+    $nv_Cache->delMod($module_name);
+
+    die('OK');
+}
+
+//Danh sach chu de
+$page_title = $lang_module['fields_list'];
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $pid . " ORDER BY weight ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $pid . " ORDER BY weight ASC";
 $result = $db->query($sql);
 $num = $result->rowCount();
 
 if (!$num) {
     if ($pid) {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
+        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields");
     } else {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments&add=1");
+        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields&add=1");
     }
     exit();
 }
 
 if ($pid) {
-    $sql2 = "SELECT title,parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $pid;
+    $sql2 = "SELECT title,parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id=" . $pid;
     $result2 = $db->query($sql2);
     list ($parentid, $parentid2) = $result2->fetch(3);
-    $caption = sprintf($lang_module['table_detion2'], $parentid);
-    $parentid = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;pid=" . $parentid2 . "\">" . $parentid . "</a>";
+    $caption = sprintf($lang_module['table_caption2'], $parentid);
+    $parentid = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=fields&amp;pid=" . $parentid2 . "\">" . $parentid . "</a>";
 } else {
-    $caption = $lang_module['table_detion1'];
+    $caption = $lang_module['table_caption1'];
     $parentid = $lang_module['cat_maincat'];
 }
 
@@ -396,9 +412,9 @@ $list = array();
 $a = 0;
 
 while ($row = $result->fetch()) {
-    $numsub = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $row['id'])->rowCount();
+    $numsub = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $row['id'])->rowCount();
     if ($numsub) {
-        $numsub = " (<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;pid=" . $row['id'] . "\">" . $numsub . " " . $lang_module['de_sub'] . "</a>)";
+        $numsub = " (<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=fields&amp;pid=" . $row['id'] . "\">" . $numsub . " " . $lang_module['cat_sub'] . "</a>)";
     } else {
         $numsub = "";
     }
@@ -415,18 +431,19 @@ while ($row = $result->fetch()) {
     $list[$row['id']] = array(
         'id' => (int) $row['id'],
         'title' => $row['title'],
-        'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;deid=" . $row['id'],
+        'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'],
         'numsub' => $numsub,
         'parentid' => $parentid,
         'weight' => $weight,
+        'status' => $row['status'] ? " checked=\"checked\"" : "",
         'class' => $class
     );
 
     $a++;
 }
 
-$xtpl = new XTemplate("de_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
-$xtpl->assign('ADD_NEW_DE', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;add=1");
+$xtpl = new XTemplate("fields_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+$xtpl->assign('ADD_NEW_CAT', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=fields&amp;add=1");
 $xtpl->assign('TABLE_CAPTION', $caption);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('LANG', $lang_module);
@@ -444,7 +461,7 @@ foreach ($list as $row) {
         $xtpl->parse('main.row.weight');
     }
 
-    $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;edit=1&amp;deid=" . $row['id']);
+    $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=fields&amp;edit=1&amp;catid=" . $row['id']);
     $xtpl->parse('main.row');
 }
 

@@ -17,10 +17,7 @@
                     {LANG.cat_sort}
                 </th>
                 <th>
-                    {LANG.de_name}
-                </th>
-                <th>
-                    {LANG.de_parent}
+                    {LANG.detype_name}
                 </th>
                 <th class="text-center">
                     {LANG.feature}
@@ -40,9 +37,6 @@
                 <td>
                     <strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub}
                 </td>
-                <td>
-                    {ROW.parentid}
-                </td>
                 <td class="text-center">
                     <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{EDIT_URL}">{GLANG.edit}</a></span> -
                     <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_de_del({ROW.id});">{GLANG.delete}</a></span>
@@ -53,6 +47,6 @@
     </table>
 </div>
 
-<a class="btn btn-primary" href="{ADD_NEW_DE}">{LANG.de_add}</a>
+<a class="btn btn-primary" href="{ADD_NEW_DE}">{LANG.detype_add}</a>
 
 <!-- END: main -->

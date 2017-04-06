@@ -8,22 +8,10 @@
         <tbody>
             <tr>
                 <td>
-                    {LANG.de_name} (<span style="color:red">*</span>)
+                    {LANG.detype_name} (<span style="color:red">*</span>)
                 </td>
                 <td>
                     <input class="form-control w400" value="{DATA.title}" name="title" id="title" maxlength="100" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {LANG.de_parent}
-                </td>
-                <td>
-                    <select class="form-control w200" name="parentid">
-                        <!-- BEGIN: parentid -->
-                        <option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
-                        <!-- END: parentid -->
-                    </select>
                 </td>
             </tr>
             <tr>

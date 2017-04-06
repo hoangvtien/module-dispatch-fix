@@ -13,10 +13,8 @@
         </colgroup>
         <thead>
             <tr>
-                <th>{LANG.cat_sort}</th>
-                <th>{LANG.cat_name}</th>
-                <th>{LANG.cat_parent}</th>
-                <th class="text-center">{LANG.cat_active}</th>
+            	 <th>STT</th>
+                <th>{LANG.fields_name}</th>
                 <th class="text-center">{LANG.feature}</th>
             </tr>
         </thead>
@@ -24,20 +22,10 @@
         <!-- BEGIN: row -->
             <tr>
                 <td>
-                    <select class="form-control" name="weight" id="weight{ROW.id}" onchange="nv_chang_cat_weight({ROW.id});">
-                        <!-- BEGIN: weight -->
-                        <option value="{WEIGHT.pos}"{WEIGHT.selected}>{WEIGHT.pos}</option>
-                        <!-- END: weight -->
-                    </select>
+                  {WEIGHT.pos}
                 </td>
                 <td>
                     <strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub}
-                </td>
-                <td>
-                    {ROW.parentid}
-                </td>
-                <td class="text-center">
-                    <input type="checkbox" name="active" id="change_status{ROW.id}" value="1"{ROW.status} onclick="nv_chang_cat_status({ROW.id});" />
                 </td>
                 <td class="text-center">
                     <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{EDIT_URL}">{GLANG.edit}</a> -
@@ -49,6 +37,6 @@
     </table>
 </div>
 
-<a class="btn btn-primary" href="{ADD_NEW_CAT}">{LANG.cat_add}</a>
+<a class="btn btn-primary" href="{ADD_NEW_CAT}">{LANG.fields_add}</a>
 
 <!-- END: main -->

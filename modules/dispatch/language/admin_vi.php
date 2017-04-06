@@ -46,14 +46,22 @@ $lang_module['cat_err_save'] = 'Lỗi: Vì một lý do nào đó mà dữ liệ
 $lang_module['cat_err_update'] = 'Lỗi: Vì một lý do nào đó mà các thay đổi không thể cập nhạt được. Chúng tôi thành thật xin lỗi vì sự bất tiện này';
 
 $lang_module['departments'] = 'Phòng ban';
+$lang_module['departments_type'] = 'Loại phòng ban';
 $lang_module['de_del'] = 'Bạn có chắc chắn xóa phòng bàn này? Việc xóa phòng ban sẽ dẫn tới việc xóa toàn bộ các phòng ban, công văn cũng như các phần liên quan. Bạn có chắc chắn thực hiện?';
 $lang_module['de_name'] = 'Tên Phòng ban';
-$lang_module['de_parent'] = 'Thuộc Phòng ban ';
+$lang_module['detype_name'] = 'Tên loại Phòng ban';
+$lang_module['de_parent'] = 'Thuộc loại Phòng ban ';
 $lang_module['de_sub'] = 'danh mục phòng ban con';
 $lang_module['de_add'] = 'Thêm phòng ban';
+$lang_module['detype_add'] = 'Thêm loại phòng ban';
 $lang_module['de_list'] = 'Danh sách phòng ban';
 $lang_module['table_detion1'] = 'Danh sách các phòng ban là chủ đề chính';
 $lang_module['table_detion2'] = 'Danh sách các phòng ban con của phòng ban &ldquo;<strong>%s</strong>&rdquo;';
+
+$lang_module['fields'] = 'Lĩnh vực';
+$lang_module['fields_add'] = 'Thêm lĩnh vực';
+$lang_module['fields_name'] = 'Tên lĩnh vực';
+$lang_module['fields_list'] = 'Danh sách lĩnh vực';
 
 $lang_module['de_name'] = 'Tên phòng ban ';
 $lang_module['head'] = 'Tên trưởng phòng ';
