@@ -8,17 +8,35 @@
  * @Createdate Tue, 19 Jul 2011 09:07:26 GMT
  */
 
-if (!defined('NV_MAINFILE')) die('Stop!!!');
+if( !defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
-$sql_drop_module = array();
+$sql_drop_module = array( );
+
+//bảng công văn mặc định
+
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_departments";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat";
-$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type";
+//$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_document";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_de_do";
 
+//bảng công văn thiết kế mới
+
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_assignment";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department_cat";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_fields";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_follow";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_user";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type";
+
 $sql_create_module = $sql_drop_module;
+
+//bảng công văn mặc định
+
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_departments (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -31,9 +49,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias),
  KEY weight (weight)
-) ENGINE=MyISAM;";
+ ) ENGINE=MyISAM;";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
+ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
  alias varchar(250) NOT NULL,
@@ -45,9 +63,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias),
  KEY weight (weight)
-) ENGINE=MyISAM;";
+ ) ENGINE=MyISAM;";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type (
+/* $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
  alias varchar(250) NOT NULL,
@@ -57,9 +75,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias),
  KEY weight (weight)
-) ENGINE=MyISAM;";
+ ) ENGINE=MyISAM;";*/
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer (
+ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  name varchar(255) NOT NULL,
  positions varchar(255) NOT NULL,
@@ -68,7 +86,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id)
  ) ENGINE=MyISAM;";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_document (
+ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_document (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  type mediumint(8) unsigned NOT NULL DEFAULT '0',
  catid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -92,11 +110,107 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  UNIQUE KEY alias (alias),
  KEY type (type),
  KEY catid (catid)
-) ENGINE=MyISAM;";
+ ) ENGINE=MyISAM;";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_de_do (
+ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_de_do (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  doid mediumint(8) unsigned NOT NULL DEFAULT '0',
  deid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (id)
+ PRIMARY KEY (id)
  ) ENGINE=MyISAM;";
+
+//bảng công văn thiết kế mới
+
+//assignment
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_assignment (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `id_dispatch` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `id_department` mediumint(8) UNSIGNED NOT NULL,
+  `assingtime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `completiontime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `userid_command` mediumint(8) NOT NULL DEFAULT '0',
+  `userid_follow` mediumint(8) NOT NULL DEFAULT '0',
+  `userid_perform` mediumint(8) NOT NULL DEFAULT '0',
+  `work_content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attach_file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+ KEY `id_dispatch` (`id_dispatch`,`id_department`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (
+   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `depcatid` mediumint(8) NOT NULL DEFAULT '0',
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `weight` smallint(4) UNSIGNED NOT NULL DEFAULT '0',
+  	PRIMARY KEY (`id`),
+ 	KEY `depcatid` (`depcatid`,`weight`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department_cat (
+   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `weight` smallint(4) UNSIGNED NOT NULL DEFAULT '0',
+  	PRIMARY KEY (`id`),
+  	KEY `weight` (`weight`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_fields (
+ `id` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+ `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_follow (
+   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_dispatch` int(11) NOT NULL,
+  `id_department` mediumint(8) NOT NULL,
+  `list_userid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `timeview` int(11) NOT NULL,
+  `list_hitstotal` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `result` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+ KEY `id_dispatch` (`id_dispatch`,`id_department`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
+   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` tinyint(4) NOT NULL,
+  `idfield` tinyint(4) NOT NULL,
+  `idtype` tinyint(4) NOT NULL,
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abstract` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_ signer` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_initial` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level_important` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  `number_dispatch` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number_text_come` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `publtime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `sendtime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `receivetime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `processingtime` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `recipient` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attach_file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `alias` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `status` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  `term_view` int(11) NOT NULL DEFAULT '0',
+  `reply` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  	PRIMARY KEY (`id`),
+	KEY `idfield` (`idfield`),
+	KEY `idtype` (`idtype`),
+	KEY `status` (`status`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_type (
+	`id` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  	PRIMARY KEY (`id`)
+) ENGINE=MyISAM;";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_user (
+	userid mediumint(8) UNSIGNED NOT NULL,
+  iddepart mediumint(8) NOT NULL DEFAULT '0',
+  office tinyint(4) NOT NULL DEFAULT '0',
+  UNIQUE KEY userid (userid,iddepart)
+) ENGINE=MyISAM;";
+
