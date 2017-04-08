@@ -78,6 +78,9 @@ $lang_module['add_dis_com'] = 'Nhập công văn đến';
 $lang_module['dis_go'] = 'Công văn đi';
 $lang_module['dis_inter'] = 'Công văn nội bộ';
 
+$lang_module['dis_type'] = 'Chọn loại công văn đi hoặc đến';
+$lang_module['dis_type_1'] = 'Công văn đến';
+$lang_module['dis_type_2'] = 'Công văn đi';
 $lang_module['dis_name'] = 'Tên công văn';
 $lang_module['dis_souce'] = 'Đơn vị soạn';
 $lang_module['dis_code'] = 'Số công văn';
@@ -138,6 +141,8 @@ $lang_module['error_die_first'] = 'Ngày hết hạn phải lớn hơn ngày có
 
 $lang_module['type'] = 'Loại công văn';
 $lang_module['signer'] = 'Người ký công văn';
+
+$lang_module['type_de'] = 'Xóa loại công văn';
 
 $lang_module['type_add'] = 'Thêm loại công văn';
 $lang_module['type_sort'] = 'Thứ tự';

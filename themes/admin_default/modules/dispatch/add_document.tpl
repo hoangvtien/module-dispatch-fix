@@ -12,6 +12,15 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
+				<td>{LANG.dis_type}</td>
+				<td>
+				<select class="form-control w200" name="typeid">
+					<option value="0">{LANG.dis}</option>
+					<option value="1">{LANG.dis_type_1}</option>
+					<option value="2">{LANG.dis_type_2}</option>
+				</select></td>
+			</tr>
+			<tr>
 				<td width="200px">{LANG.dis_name} (<span class="red">*</span>)</strong></td>
 				<td><input class="form-control w400" value="{DATA.title}" name="title" id="title" maxlength="100" /><input type = "hidden" name = "id" value="{id}"></td>
 			</tr>
