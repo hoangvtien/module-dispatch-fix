@@ -1,4 +1,4 @@
-<!-- BEGIN: main -->test
+<!-- BEGIN: main -->abc
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
