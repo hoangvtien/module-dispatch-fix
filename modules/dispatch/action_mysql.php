@@ -141,6 +141,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
    `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `depcatid` mediumint(8) NOT NULL DEFAULT '0',
   `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  alias varchar(250) NOT NULL,
   `weight` smallint(4) UNSIGNED NOT NULL DEFAULT '0',
   	PRIMARY KEY (`id`),
  	KEY `depcatid` (`depcatid`,`weight`)
@@ -149,7 +150,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department_cat (
    `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `weight` smallint(4) UNSIGNED NOT NULL DEFAULT '0',
+  	alias varchar(250) NOT NULL,
+  	`weight` smallint(4) UNSIGNED NOT NULL DEFAULT '0',
   	PRIMARY KEY (`id`),
   	KEY `weight` (`weight`)
 ) ENGINE=MyISAM;";

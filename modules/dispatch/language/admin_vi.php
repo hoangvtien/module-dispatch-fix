@@ -189,3 +189,9 @@ $lang_module['logChangeWeight'] = 'Thay đổi thứ tự sắp xếp';
 $lang_module['logDelsigner'] = 'Xóa người ký';
 
 $lang_module['in_result_errday'] = 'Lỗi định dạng ngày tháng';
+
+$lang_module['detype_err_notitle'] = 'Lỗi: Bạn chưa nhập tên loại phòng ban';
+$lang_module['detype_err_exist'] = 'Lỗi: loại phòng ban này đã có';
+$lang_module['detype_edit'] = 'Chỉnh sửa loại phòng ban';
+$lang_module['detype_list'] = 'Danh sách loại phòng ban';
+$lang_module['detype_del'] = 'Bạn có chắc chắn xóa loại phòng bàn này? Việc xóa loại phòng ban sẽ dẫn tới việc xóa toàn bộ các phòng ban, công văn cũng như các phần liên quan. Bạn có chắc chắn thực hiện?';

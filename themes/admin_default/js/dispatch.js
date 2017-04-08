@@ -79,6 +79,16 @@ function nv_chang_de_weight(deid) {
 }
 
 //  ---------------------------------------
+function nv_chang_detype_weight(deid) {
+	var nv_timer = nv_settimeout_disable('weight' + deid, 2000);
+	var newpos = document.getElementById( 'weight' + deid ).options[document.getElementById('weight' + deid).selectedIndex].value;
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=departments_type&nocache=' + new Date().getTime(), 'changeweight=1&deid=' + deid + '&new=' + newpos + '&num=' + nv_randomPassword(8), function(res) {
+		nv_chang_detype_weight_result( res );
+	});
+	return;
+}
+
+//  ---------------------------------------
 
 function nv_chang_de_weight_result(res) {
 	if (res != 'OK') {
@@ -90,10 +100,28 @@ function nv_chang_de_weight_result(res) {
 }
 
 //  ---------------------------------------
+function nv_chang_detype_weight_result(res) {
+	if (res != 'OK') {
+		alert(nv_is_change_act_confirm[2]);
+	}
+	clearTimeout(nv_timer);
+	window.location.href = window.location.href;
+	return;
+}
 
+//  ---------------------------------------
 function nv_de_del(deid) {
 	if (confirm(de_del_cofirm)) {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=departments&nocache=' + new Date().getTime(), 'del=1&deid=' + deid + '&num=' + nv_randomPassword(8), function(res) {
+			nv_de_del_result( res );
+		});
+	}
+	return false;
+}
+
+function nv_detype_del(deid) {
+	if (confirm(de_del_cofirm)) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=departments_type&nocache=' + new Date().getTime(), 'del=1&deid=' + deid + '&num=' + nv_randomPassword(8), function(res) {
 			nv_de_del_result( res );
 		});
 	}

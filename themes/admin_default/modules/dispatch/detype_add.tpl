@@ -15,6 +15,14 @@
                 </td>
             </tr>
             <tr>
+                <td>
+                    {LANG.alias}
+                </td>
+                <td>
+                    <input class="form-control w400" value="{DATA.alias}" name="alias" id="alias" maxlength="100" />
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">
                     <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" />
                 </td>

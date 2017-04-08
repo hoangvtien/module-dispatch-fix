@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
-	var de_del_cofirm = "{LANG.de_del}";
+	var de_del_cofirm = "{LANG.detype_del}";
 </script>
 
 <div id="users">
@@ -28,7 +28,7 @@
         <!-- BEGIN: row -->
             <tr>
                 <td style="width:15px">
-                    <select class="form-control" name="weight" id="weight{ROW.id}" onchange="nv_chang_de_weight({ROW.id});">
+                    <select class="form-control" name="weight" id="weight{ROW.id}" onchange="nv_chang_detype_weight({ROW.id});">
                         <!-- BEGIN: weight -->
                         <option value="{WEIGHT.pos}"{WEIGHT.selected}>{WEIGHT.pos}</option>
                         <!-- END: weight -->
@@ -39,7 +39,7 @@
                 </td>
                 <td class="text-center">
                     <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{EDIT_URL}">{GLANG.edit}</a></span> -
-                    <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_de_del({ROW.id});">{GLANG.delete}</a></span>
+                    <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_detype_del({ROW.id});">{GLANG.delete}</a></span>
                 </td>
             </tr>
         <!-- END: row -->
