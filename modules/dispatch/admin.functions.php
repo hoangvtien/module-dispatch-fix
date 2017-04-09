@@ -25,6 +25,7 @@ $allow_func = array(
     'add_document',
     'signer',
     'fields',
+    'employee',
     'type'
 );
 global $arr_status,$arr_level_important,$arr_reply;
