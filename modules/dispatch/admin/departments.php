@@ -20,12 +20,12 @@ function nv_FixWeightCat($parentid = 0)
 {
     global $db, $module_data;
 
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $parentid . " ORDER BY weight ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight ASC";
     $result = $db->query($sql);
     $weight = 0;
     while ($row = $result->fetch()) {
         $weight++;
-        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $weight . " WHERE id=" . $row['id']);
+        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_department SET weight=" . $weight . " WHERE id=" . $row['id']);
     }
 }
 
@@ -37,9 +37,10 @@ function nv_FixWeightCat($parentid = 0)
  */
 function nv_del_cat($deid)
 {
+	//cần chỉnh lại khi xóa một phòng ban sẽ xóa hết dữ liệu hay chuyển sang một phòng ban thay thế khác
     global $db, $module_data, $admin_info;
 
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE from_depid=" . $deid;
+   /* $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE from_depid=" . $deid;
     $db->query($sql);
 
     $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE deid=" . $deid;
@@ -49,9 +50,9 @@ function nv_del_cat($deid)
     $result = $db->query($sql);
     while (list ($id) = $result->fetch(3)) {
         nv_del_cat($id);
-    }
+    }*/
 
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_department WHERE id=" . $deid;
     $db->query($sql);
     nv_insert_logs(NV_LANG_DATA, $module_data, "delete dispatch", '', $admin_info['userid'], '');
 }
@@ -95,9 +96,8 @@ if ($nv_Request->isset_request('add', 'get')) {
                 }
             }
         }
-
-        if (!$is_error) {
-            $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_department WHERE depcatid=" . $array['parentid'];
+		if (!$is_error) {
+            $sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_department";
             $result = $db->query($sql);
             $new_weight = $result->fetchColumn();
             $new_weight = (int) $new_weight;
@@ -289,7 +289,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
     exit();
 }
 
-//Xoa chu de
+//Xoa pong ban
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) die('Wrong URL');
 
@@ -298,15 +298,6 @@ if ($nv_Request->isset_request('del', 'post')) {
     if (empty($deid)) {
         die('NO');
     }
-
-    $sql = "SELECT COUNT(*) AS count, parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
-    $result = $db->query($sql);
-    list ($count, $parentid) = $result->fetch(3);
-
-    if ($count != 1) {
-        die('NO');
-    }
-
     nv_del_cat($deid);
     nv_FixWeightCat($parentid);
     $nv_Cache->delMod($module_name);
@@ -321,23 +312,16 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $new = $nv_Request->get_int('new', 'post', 0);
 
     if (empty($deid)) die('NO');
-
-    $query = "SELECT parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $deid;
-    $result = $db->query($query);
-    $numrows = $result->rowCount();
-    if ($numrows != 1) die('NO');
-    $parentid = $result->fetchColumn();
-
-    $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id!=" . $deid . " AND parentid=" . $parentid . " ORDER BY weight ASC";
+    $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_department WHERE id!=" . $deid . " ORDER BY weight ASC";
     $result = $db->query($query);
     $weight = 0;
     while ($row = $result->fetch()) {
         $weight++;
         if ($weight == $new) $weight++;
-        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $weight . " WHERE id=" . $row['id'];
+        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_department SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query($sql);
     }
-    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_departments SET weight=" . $new . " WHERE id=" . $deid;
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_department SET weight=" . $new . " WHERE id=" . $deid;
     $db->query($sql);
 
     $nv_Cache->delMod($module_name);
@@ -350,41 +334,22 @@ $page_title = $lang_module['de_list'];
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $pid . " ORDER BY weight ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight ASC";
 $result = $db->query($sql);
 $num = $result->rowCount();
 
 if (!$num) {
-    if ($pid) {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments");
-    } else {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments&add=1");
-    }
+    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments&add=1");
     exit();
 }
-
-if ($pid) {
-    $sql2 = "SELECT title,parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE id=" . $pid;
-    $result2 = $db->query($sql2);
-    list ($parentid, $parentid2) = $result2->fetch(3);
-    $caption = sprintf($lang_module['table_detion2'], $parentid);
-    $parentid = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;pid=" . $parentid2 . "\">" . $parentid . "</a>";
-} else {
-    $caption = $lang_module['table_detion1'];
-    $parentid = $lang_module['cat_maincat'];
-}
-
 $list = array();
 $a = 0;
 
 while ($row = $result->fetch()) {
-    $numsub = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $row['id'])->rowCount();
-    if ($numsub) {
-        $numsub = " (<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;pid=" . $row['id'] . "\">" . $numsub . " " . $lang_module['de_sub'] . "</a>)";
-    } else {
-        $numsub = "";
-    }
-
+	$sql2 = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_department_cat WHERE id=" . $row['depcatid'];
+	$result2 = $db->query($sql2);
+	$parentid = $result2->fetch();
+	$parentid = $parentid['title'];
     $weight = array();
     for ($i = 1; $i <= $num; $i++) {
         $weight[$i]['title'] = $i;
@@ -398,7 +363,6 @@ while ($row = $result->fetch()) {
         'id' => (int) $row['id'],
         'title' => $row['title'],
         'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;deid=" . $row['id'],
-        'numsub' => $numsub,
         'parentid' => $parentid,
         'weight' => $weight,
         'class' => $class
@@ -409,7 +373,7 @@ while ($row = $result->fetch()) {
 
 $xtpl = new XTemplate("de_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('ADD_NEW_DE', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=departments&amp;add=1");
-$xtpl->assign('TABLE_CAPTION', $caption);
+
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
