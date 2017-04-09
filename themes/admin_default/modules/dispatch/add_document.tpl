@@ -14,7 +14,7 @@
 			<tr>
 				<td>{LANG.dis_type}</td>
 				<td>
-				<select class="form-control w200" name="typeid">
+				<select class="form-control w200" name="type">
 					<option value="0">{LANG.dis}</option>
 					<option value="1">{LANG.dis_type_1}</option>
 					<option value="2">{LANG.dis_type_2}</option>
@@ -55,6 +55,11 @@
 			</tr>
 
 			<tr>
+				<td>{LANG.number_text_come}</td>
+				<td><input class="form-control w400" value="{DATA.number_text_come}" name="number_text_come" id="number_text_come" maxlength="100" /></td>
+			</tr>
+
+			<tr>
 				<td>{LANG.dis_souce}(<span class="red">*</span>)</strong></td>
 				<td><input class="form-control w400" value="{DATA.from_org}" name="from_org" id="from_org" maxlength="100" /></td>
 			</tr>
@@ -63,24 +68,28 @@
 				<td><textarea class="form-control w400" name="to_org">{DATA.to_org}</textarea><span class="help-block">{LANG.org}</span></td>
 			</tr>
 
-			<tr>
+			<!--<tr>
 				<td>{LANG.from_depid}</td>
 				<td>
 				<select class="form-control w200" name="from_depid">
 					<!-- BEGIN: from_depid -->
-					<option value="{LISTDES.id}"{LISTDES.selected}>{LISTDES.name}</option>
+					<!--<option value="{LISTDES.id}"{LISTDES.selected}>{LISTDES.name}</option>
 					<!-- END: from_depid -->
-				</select></td>
+				<!--</select></td>
+			</tr>-->
+			<tr>
+				<td>{LANG.name_signer}(<span class="red">*</span>)</strong></td>
+				<td>
+					<input class="form-control w400" value="{DATA.name_signer}" name="name_signer" id="name_signer" maxlength="100" />
+				</td>
 			</tr>
 			<tr>
-				<td>{LANG.dis_person}(<span class="red">*</span>)</strong></td>
+				<td>{LANG.name_initial}</td>
 				<td>
-				<select class="form-control w200" name="from_signer" id="from_signer_{LISSIS.id}" onchange="nv_link('{LISSIS.id}');" >
-					<!-- BEGIN: from_signer -->
-					<option value="{LISSIS.id}"{LISSIS.selected}>{LISSIS.name}</option>
-					<!-- END: from_signer -->
-				</select><span id="hienthi"> {position} </span></td>
+					<input class="form-control w400" value="{DATA.name_initial}" name="name_initial" id="name_initial" maxlength="100" />
+				</td>
 			</tr>
+
 
 			<tr>
 				<td>{LANG.dis_date_iss}(<span class="red">*</span>)</strong></td>
@@ -93,11 +102,20 @@
 
 			<tr>
 				<td>{LANG.dis_date_die}</td>
-				<td><input class="form-control w200 pull-left" value="{DATA.date_die}" type="text" id="date_die" name="date_die" readonly="readonly" /></td>
+				<td><input class="form-control w200 pull-left" value="{DATA.date_die}" type="text" id="date_die" name="date_die"/></td>
+			</tr>
+			<tr>
+				<td>{LANG.dis_date_term_view}</td>
+				<td><input class="form-control w200 pull-left" value="{DATA.date_term_view}" type="text" id="date_term_view" name="date_term_view" readonly="readonly" /></td>
 			</tr>
 			<tr>
 				<td>{LANG.dis_content}</td>
 				<td><textarea class="form-control" rows="8" name="content">{DATA.content}</textarea></td>
+			</tr>
+
+			<tr>
+				<td>{LANG.note}</td>
+				<td><textarea class="form-control" rows="8" name="note">{DATA.note}</textarea></td>
 			</tr>
 
 			<tr>
@@ -121,6 +139,24 @@
 				</td>
 			</tr>
 			<tr>
+				<td>{LANG.dis_level0}</td>
+				<td>
+				<select class="form-control w200" name="levelid">
+					<!-- BEGIN: levelid -->
+					<option value="{LISTLEVEL.id}"{LISTLEVEL.selected}>{LISTLEVEL.name}</option>
+					<!-- END: levelid -->
+				</select></td>
+			</tr>
+			<tr>
+				<td>{LANG.dis_reply0}</td>
+				<td>
+				<select class="form-control w200" name="replyid">
+					<!-- BEGIN: replyid -->
+					<option value="{LISTREPLY.id}"{LISTREPLY.selected}>{LISTREPLY.name}</option>
+					<!-- END: replyid -->
+				</select></td>
+			</tr>
+			<tr>
 				<td>{LANG.dis_status}</td>
 				<td>
 				<select class="form-control w200" name="statusid">
@@ -130,7 +166,7 @@
 				</select></td>
 			</tr>
 
-			<tr>
+		<!--	<tr>
 				<td >{LANG.dis_de}</td>
 
 				<td>
@@ -142,18 +178,18 @@
 							</td>
 						</tr>
 						<!-- BEGIN: loop -->
-						<tr>
+						<!--<tr>
 							<td>
 								<input name="deid[{ROW.id}]" value="{ROW.id}" type="checkbox" {ROW.checked} id="idcheck[]"/> {ROW.name}
 							</td>
 						</tr>
 						<!-- END: loop -->
 
-					</table>
+					<!--</table>
 
 				</div></td>
 			</tr>
-
+		-->
 			<tr>
 				<td>{LANG.who_view}</td>
 				<td>
@@ -174,7 +210,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
-	$("#from_time,#date_iss, #date_first, #date_die").datepicker({
+	$("#from_time,#date_iss, #date_first, #date_die,#date_term_view").datepicker({
 		showOn : "both",
 		dateFormat : "dd.mm.yy",
 		changeMonth : true,

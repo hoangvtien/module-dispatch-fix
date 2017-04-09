@@ -27,7 +27,7 @@ $allow_func = array(
     'fields',
     'type'
 );
-global $arr_status;
+global $arr_status,$arr_level_important,$arr_reply;
 $arr_status = array(
     '0' => array(
         'id' => '0',
@@ -40,9 +40,54 @@ $arr_status = array(
     '2' => array(
         'id' => '2',
         'name' => $lang_module['dis_sta2']
+    ),
+	'3' => array(
+        'id' => '3',
+        'name' => $lang_module['dis_sta3']
+    ),
+	'4' => array(
+        'id' => '4',
+        'name' => $lang_module['dis_sta4']
+    ),
+    '5' => array(
+        'id' => '5',
+        'name' => $lang_module['dis_sta5']
     )
 );
 
+$arr_level_important = array(
+    '0' => array(
+        'id' => '0',
+        'name' => $lang_module['dis_level0']
+    ),
+    '1' => array(
+        'id' => '1',
+        'name' => $lang_module['dis_level1']
+    ),
+    '2' => array(
+        'id' => '2',
+        'name' => $lang_module['dis_level2']
+    ),
+	'3' => array(
+        'id' => '3',
+        'name' => $lang_module['dis_level3']
+    )
+);
+
+$arr_reply = array(
+    '0' => array(
+        'id' => '0',
+        'name' => $lang_module['dis_reply0']
+    ),
+    '1' => array(
+        'id' => '1',
+        'name' => $lang_module['dis_reply1']
+    ),
+    '2' => array(
+        'id' => '2',
+        'name' => $lang_module['dis_reply2']
+    )
+);
 define('NV_IS_FILE_ADMIN', true);
 
 /**

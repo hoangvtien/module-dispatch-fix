@@ -51,7 +51,7 @@ if (empty($listcats)) {
 }
 
 $listdes = nv_listdes(0);
-if (empty($listdes)) {
+/*if (empty($listdes)) {
     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments_type&add=1");
     exit();
 }
@@ -74,7 +74,7 @@ if (empty($listsinger)) {
     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=singer&add");
     exit();
 }
-
+*/
 $page_title = $lang_module['table'];
 
 if ($nv_Request->isset_request("type", "get")) {
