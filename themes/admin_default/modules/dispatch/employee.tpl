@@ -6,7 +6,7 @@
 	<input class="btn btn-primary" name="addUser" type="button" value="Thêm nhân viên" />
 	<input class="btn btn-success" name="searchUser" type="button" value="Tìm" />
 </div>
-<!-- BEGIN: userlist -->
+
 <div id="pageContent">&nbsp;</div>
 <script type="text/javascript">
 	//<![CDATA[
@@ -14,7 +14,7 @@
 		$("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10));
 	});
 	$("input[name=searchUser]").click(function() {
-		nv_open_browse("{MODULE_URL}=getuserid&area=uid&filtersql={FILTERSQL}", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse("http://congvan.my/admin/index.php?language=vi&nv=users&op=getuserid&area=uid&filtersql=vUhbjls6WmTsLw0O0U6SS159KPebUPco9n33OpAl-CgQz11v-IeXqNGZUXz3ZRyxUceWyba1wqGyFg6ye97zrhmhyiBL4iP5YX6RzRZJwP4,", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$("input[name=addUser]").click(function() {
@@ -37,5 +37,5 @@
 	});
 	//]]>
 </script>
-<!-- END: userlist -->
+
 <!-- END: main -->
