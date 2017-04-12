@@ -16,53 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
  * @param integer $parentid
  * @return
  */
-function nv_FixWeightCat($parentid = 0)
-{
-    global $db, $module_data;
-
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight ASC";
-    $result = $db->query($sql);
-    $weight = 0;
-    while ($row = $result->fetch()) {
-        $weight++;
-        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_department SET weight=" . $weight . " WHERE id=" . $row['id']);
-    }
-}
-
-/**
- * nv_del_cat()
- *
- * @param mixed $catid
- * @return
- */
-function nv_del_cat($deid)
-{
-	//cần chỉnh lại khi xóa một phòng ban sẽ xóa hết dữ liệu hay chuyển sang một phòng ban thay thế khác
-    global $db, $module_data, $admin_info;
-
-   /* $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE from_depid=" . $deid;
-    $db->query($sql);
-
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE deid=" . $deid;
-    $db->query($sql);
-
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_departments WHERE parentid=" . $deid;
-    $result = $db->query($sql);
-    while (list ($id) = $result->fetch(3)) {
-        nv_del_cat($id);
-    }*/
-
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_department WHERE id=" . $deid;
-    $db->query($sql);
-    nv_insert_logs(NV_LANG_DATA, $module_data, "delete dispatch", '', $admin_info['userid'], '');
-}
 
 $array = array();
 $error = "";
 
 //them chu de
-if ($nv_Request->isset_request('add', 'get')) {
-    $page_title = $lang_module['de_add'];
+
+    $page_title = $lang_module['employee_list'];
     $is_error = false;
     if ($nv_Request->isset_request('submit', 'post')) {
         $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
@@ -138,7 +98,7 @@ if ($nv_Request->isset_request('add', 'get')) {
 	    );
 	}
 
-    $xtpl = new XTemplate("de_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+    $xtpl = new XTemplate("employee.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;add=1");
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('DATA', $array);
@@ -161,7 +121,7 @@ if ($nv_Request->isset_request('add', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 
     exit();
-}
+
 
 //Sua chu de
 if ($nv_Request->isset_request('edit', 'get')) {
@@ -362,7 +322,7 @@ while ($row = $result->fetch()) {
     $list[$row['id']] = array(
         'id' => (int) $row['id'],
         'title' => $row['title'],
-        'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=employee&amp;deid=" . $row['id'],
+        'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;deid=" . $row['id'],
         'parentid' => $parentid,
         'weight' => $weight,
         'class' => $class

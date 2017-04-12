@@ -211,3 +211,4 @@ $lang_module['detype_err_exist'] = 'Lỗi: loại phòng ban này đã có';
 $lang_module['detype_edit'] = 'Chỉnh sửa loại phòng ban';
 $lang_module['detype_list'] = 'Danh sách loại phòng ban';
 $lang_module['detype_del'] = 'Bạn có chắc chắn xóa loại phòng bàn này? Việc xóa loại phòng ban sẽ dẫn tới việc xóa toàn bộ các phòng ban, công văn cũng như các phần liên quan. Bạn có chắc chắn thực hiện?';
+$lang_module['employee_list'] = 'Danh sách nhân viên';
