@@ -30,6 +30,7 @@
 		<caption>{TABLE_CAPTION}</caption>
 		<colgroup>
 			<col class="w50" />
+			<col class="w100" />
 			<col class="w250" />
 			<col span="4" />
 			<col class="w100" />
@@ -39,6 +40,7 @@
 		<thead>
 			<tr>
 				<th class="text-center"> {LANG.stt} </th>
+				<th> {LANG.dispatch} </th>
 				<th> {LANG.dis_name} </th>
 				<th> {LANG.dis_code} </th>
 				<th> {LANG.dis} </th>
@@ -54,6 +56,7 @@
 			<!-- BEGIN: row -->
 			<tr>
 				<td class="text-center"> {ROW.stt} </td>
+				<td> {ROW.dis_type} </td>
 				<td> {ROW.title0} </td>
 				<td> {ROW.code} </td>
 				<td><a href="{ROW.link_type}">{ROW.type}</a></td>

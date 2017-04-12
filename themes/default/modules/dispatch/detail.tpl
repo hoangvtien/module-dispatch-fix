@@ -64,7 +64,7 @@
 			</tr>
 
 			<tr>
-				<td colspan="2" style="text-align: justify;"> {ROW.content} </td>
+				<td colspan="2" style="text-align: justify;"> {ROW.abstract} </td>
 			</tr>
 		</tbody>
 	</table>

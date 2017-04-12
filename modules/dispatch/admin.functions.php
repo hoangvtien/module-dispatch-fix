@@ -27,7 +27,7 @@ $allow_func = array(
     'fields',
     'type'
 );
-global $arr_status,$arr_level_important,$arr_reply;
+global $arr_status,$arr_level_important,$arr_reply, $arr_dis_type;
 $arr_status = array(
     '0' => array(
         'id' => '0',
@@ -86,6 +86,21 @@ $arr_reply = array(
     '2' => array(
         'id' => '2',
         'name' => $lang_module['dis_reply2']
+    )
+);
+
+$arr_dis_type = array(
+    '0' => array(
+        'id' => '0',
+        'name' => $lang_module['dis']
+    ),
+    '1' => array(
+        'id' => '1',
+        'name' => $lang_module['dis_type_1']
+    ),
+    '2' => array(
+        'id' => '2',
+        'name' => $lang_module['dis_type_2']
     )
 );
 define('NV_IS_FILE_ADMIN', true);
@@ -291,41 +306,21 @@ function nv_listdes($parentid, $m = 0)
 {
     global $db, $module_data;
 
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_departments` ORDER BY `parentid`,`weight` ASC";
-
+    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_department` ORDER BY `weight` ASC";
     $result = $db->query($sql);
     $list = array();
     while ($row = $result->fetch()) {
-        $list[$row['parentid']][] = array(
+        $list[$row['id']][] = array(
             'id' => (int) $row['id'],
-            'parentid' => (int) $row['parentid'],
+            'parentid' => (int) $row['depcatid'],
             'title' => $row['title'],
             'alias' => $row['alias'],
-            'introduction' => $row['introduction'],
             'weight' => (int) $row['weight'],
-            'head' => $row['head'],
-            'name' => $row['title'],
-            'addtime' => $row['addtime'],
             'selected' => $parentid == $row['id'] ? " selected=\"selected\"" : "",
             'checked' => $parentid == $row['id'] ? " checked=\"checked\"" : ""
         );
     }
-
-    if (empty($list)) {
-        return $list;
-    }
-
-    $list2 = array();
-    foreach ($list[0] as $value) {
-        if ($value['id'] != $m) {
-            $list2[$value['id']] = $value;
-            if (isset($list[$value['id']])) {
-                $list2 = nv_setdes1($list2, $value['id'], $list, $m);
-            }
-        }
-    }
-
-    return $list2;
+    return $list;
 }
 
 function nv_signerList($idsigner)

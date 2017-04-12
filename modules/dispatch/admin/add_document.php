@@ -11,23 +11,23 @@
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $array['parentid'] = $catid = $array['type'] = $array['from_signer'] = $array['from_depid'] = 0;
-$arr_de['parentid'] = $array['statusid'] = $deid = $id = $array['levelid'] = $array['replyid'] = 0;
+$arr_de['parentid'] = $array['statusid'] = $deid = $id = $array['level_important'] = $array['reply'] = 0;
 $arr_imgs = $arr_img = $list_de = $lis = $listde = array();
-$array['from_time'] = $array['date_iss'] = $array['date_first'] = $array['date_die'] = $check = $to_person = $to_recipient = $error = '';
+$array['publtime'] = $array['term_view'] = $array['date_iss'] = $array['date_first'] = $array['date_die'] = $check = $to_person = $to_recipient = $error = '';
 $array['groups_view'] = 6;
 $id = $nv_Request->get_int('id', 'get', 0);
 
 // System groups user
 $groups_list = nv_groups_list();
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE id=" . $id;
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
 $result = $db->query($sql);
 $num = $result->rowCount();
 if ($num > 0) {
     $array = $result->fetch();
-    $array['parentid'] = $array['catid'];
+    $array['parentid'] = $array['idfield'];
     $array['statusid'] = $array['status'];
-    $arr_imgs = explode(',', $array['file']);
+    $arr_imgs = explode(',', $array['attach_file']);
 
     $sql1 = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE doid=" . $id;
 
@@ -65,20 +65,20 @@ if ($nv_Request->isset_request('submit', 'post')) {
 	$array['name_signer'] = $nv_Request->get_string('name_signer', 'post', '');
 	$array['name_initial'] = $nv_Request->get_string('name_initial', 'post', '');
 	$array['note'] = $nv_Request->get_string('note', 'post', '');
-	$array['levelid'] = $nv_Request->get_int('levelid', 'post', 0);
-	$array['replyid'] = $nv_Request->get_int('replyid', 'post', 0);
+	$array['level_important'] = $nv_Request->get_int('level_important', 'post', 0);
+	$array['reply'] = $nv_Request->get_int('reply', 'post', 0);
     $arr_img = $nv_Request->get_typed_array('fileupload', 'post', 'string');
-    $array['from_time'] = $nv_Request->get_title('from_time', 'post', '', '');
+    $array['publtime'] = $nv_Request->get_title('publtime', 'post', '', '');
 
-    if (!empty($array['from_time'])) {
+    if (!empty($array['publtime'])) {
         unset($m);
-        if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['from_time'], $m)) {
-            $array['from_time'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+        if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['publtime'], $m)) {
+            $array['publtime'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
             die($lang_module['in_result_errday']);
         }
     } else {
-        $array['from_time'] = '';
+        $array['publtime'] = '';
     }
 
     $array['date_iss'] = $nv_Request->get_title('date_iss', 'post', '', 1);
@@ -120,17 +120,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array['date_die'] = 0;
     }
 
-	$array['date_term_view'] = $nv_Request->get_title('date_term_view', 'post', 1);
+	$array['term_view'] = $nv_Request->get_title('term_view', 'post', 1);
 
-	if (!empty($array['date_term_view'])) {
+	if (!empty($array['term_view'])) {
         unset($m);
-        if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['date_term_view'], $m)) {
-            $array['date_term_view'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+        if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['term_view'], $m)) {
+            $array['term_view'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
             die($lang_module['in_result_errday']);
         }
     } else {
-        $array['date_term_view'] = 0;
+        $array['term_view'] = 0;
     }
 
     $cut = strlen(NV_BASE_SITEURL . "uploads/" . $module_name . "/");
@@ -148,7 +148,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $error = $lang_module['error_title'];
         } else if ($array['code'] == '') {
             $error = $lang_module['error_code'];
-        } else if ($array['from_time'] == '') {
+        } else if ($array['publtime'] == '') {
             $error = $lang_module['error_from_time'];
         } else if ($array['name_signer'] == '') {
             $error = $lang_module['error_si'];
@@ -160,7 +160,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $error = $lang_module['error_souce'];
         } else if ($array['date_iss'] > $array['date_first']) {
             $error = $lang_module['error_iss_first'];
-        } else if ($array['from_time'] > $array['date_iss']) {
+        } else if ($array['publtime'] > $array['date_iss']) {
             $error = $lang_module['error_iss_time'];
 
         } else if ($array['date_die'] != 0 && ($array['date_die'] < $array['date_first'])) {
@@ -173,13 +173,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					idtype = " . $array['typeid'] . ",
                     title = " . $db->quote($array['title']) . ",
 					abstract=" . $db->quote($array['content']) . ",
-					name_ signer= " . $db->quote($array['name_signer']) . ",
+					name_signer= " . $db->quote($array['name_signer']) . ",
 					name_initial =" . $db->quote($array['name_initial']) . ",
-					level_important = " . $array['levelid'] . ",
+					level_important = " . $array['level_important'] . ",
 					number_dispatch = " . $db->quote($array['code']) . ",
 					number_text_come = " . $db->quote($array['number_text_come']) . ",
 					note= " . $db->quote($array['note']) . ",
-					publtime = " . $array['from_time'] . ",
+					publtime = " . $array['publtime'] . ",
 					date_iss=" . $array['date_iss'] . ",
 					date_first = " . $array['date_first'] . ",
 					date_die =" . $array['date_die'] . ",
@@ -188,8 +188,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					attach_file = " . $db->quote($array['file']) . ",
                     alias = '',
 					status = " . $array['statusid'] . ",
-					term_view = " . $array['date_term_view'] . ",
-					reply = " . $array['replyid'] . "
+					term_view = " . $array['term_view'] . ",
+					reply = " . $array['reply'] . ",
+					groups_view = " . $array['groups_view'] . "
 					WHERE id = " . $id;
 
                 if ($db->query($sql)) {
@@ -226,21 +227,23 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					" . $db->quote($array['content']) . ",
 					" . $db->quote($array['name_signer']) . ",
 					" . $db->quote($array['name_initial']) . ",
-					" . $array['levelid'] . ",
+					" . $array['level_important'] . ",
 					" . $db->quote($array['code']) . ",
 					" . $db->quote($array['number_text_come']) . ",
 					" . $db->quote($array['note']) . ",
-					" . $array['from_time'] . ",
+					" . $array['publtime'] . ",
 					" . $array['date_iss'] . ",
 					" . $array['date_first'] . ",
 					" . $array['date_die'] . ",
 					" . $db->quote($array['from_org']) . ",
 					" . $db->quote($array['to_org']) . ",
-					" . $db->quote($array['file']) . ",
+					" . $db->quote($array['attach_file']) . ",
 					'',
 					" . $array['statusid'] . ",
-					" . $array['date_term_view'] . ",
-					" . $array['replyid'] . " )";
+					" . $array['term_view'] . ",
+					" . $array['reply'] . ",
+					" . $array['groups_view'] . ",
+					0 )";
 
                 $array['id'] = $db->insert_id($sql);
 
@@ -273,7 +276,7 @@ $listdes = array(
         'checked' => ''
     )
 );
-$listdes = $listdes + nv_listdes($array['from_depid'], 0);
+/*$listdes = $listdes + nv_listdes($array['from_depid'], 0);
 
 $listsinger = nv_signerList($array['from_signer']);
 
@@ -289,7 +292,7 @@ foreach ($listdes as $li) {
         );
     }
 }
-
+*/
 foreach ($arr_status as $a) {
     $as[] = array(
         'id' => $a['id'],
@@ -302,7 +305,7 @@ foreach ($arr_level_important as $level) {
     $levels[] = array(
         'id' => $level['id'],
         'name' => $level['name'],
-        'selected' => $level['id'] == $array['levelid'] ? " selected=\"selected\"" : ""
+        'selected' => $level['id'] == $array['level_important'] ? " selected=\"selected\"" : ""
     );
 }
 
@@ -310,7 +313,15 @@ foreach ($arr_reply  as $reply ) {
     $replys[] = array(
         'id' => $reply['id'],
         'name' => $reply['name'],
-        'selected' => $reply['id'] == $array['replyid'] ? " selected=\"selected\"" : ""
+        'selected' => $reply['id'] == $array['reply'] ? " selected=\"selected\"" : ""
+    );
+}
+
+foreach ($arr_dis_type   as $dis_type ) {
+    $dis_types[] = array(
+        'id' => $dis_type['id'],
+        'name' => $dis_type['name'],
+        'selected' => $dis_type['id'] == $array['type'] ? " selected=\"selected\"" : ""
     );
 }
 
@@ -329,8 +340,8 @@ $xtpl->assign('FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('fileupload_num', $fileupload_num);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op);
 
-if ($array['from_time'] != '') {
-    $array['from_time'] = date("d.m.Y", $array['from_time']);
+if ($array['publtime'] != '') {
+    $array['publtime'] = date("d.m.Y", $array['publtime']);
 }
 
 if ($array['date_iss'] != '') {
@@ -344,8 +355,8 @@ if ($array['date_first'] != '') {
 if ($array['date_die'] != '' && $array['date_die'] != 0) {
     $array['date_die'] = date("d.m.Y", $array['date_die']);
 }
-if ($array['date_term_view'] != '') {
-    $array['date_term_view'] = date("d.m.Y", $array['date_term_view']);
+if ($array['term_view'] != '') {
+    $array['term_view'] = date("d.m.Y", $array['term_view']);
 }
 
 $xtpl->assign('DATA', $array);
@@ -360,10 +371,6 @@ foreach ($listtypes as $type) {
     $xtpl->parse('inter.typeid');
 }
 
-foreach ($listsinger as $singer) {
-    $xtpl->assign('LISSIS', $singer);
-    $xtpl->parse('inter.from_signer');
-}
 
 foreach ($listdes as $de) {
     $xtpl->assign('LISTDES', $de);
@@ -377,12 +384,17 @@ foreach ($as as $a) {
 
 foreach ($levels as $level) {
     $xtpl->assign('LISTLEVEL', $level);
-    $xtpl->parse('inter.levelid');
+    $xtpl->parse('inter.level_important');
 }
 
 foreach ($replys as $reply) {
     $xtpl->assign('LISTREPLY', $reply);
-    $xtpl->parse('inter.replyid');
+    $xtpl->parse('inter.reply');
+}
+
+foreach ($dis_types as $dis_type) {
+    $xtpl->assign('LISTDISTYPE', $dis_type);
+    $xtpl->parse('inter.dis_type');
 }
 
 $groups_view = explode(',', $array['groups_view']);

@@ -15,9 +15,9 @@
 				<td>{LANG.dis_type}</td>
 				<td>
 				<select class="form-control w200" name="type">
-					<option value="0">{LANG.dis}</option>
-					<option value="1">{LANG.dis_type_1}</option>
-					<option value="2">{LANG.dis_type_2}</option>
+					<!-- BEGIN: dis_type -->
+					<option value="{LISTDISTYPE.id}"{LISTDISTYPE.selected}>{LISTDISTYPE.name}</option>
+					<!-- END: dis_type -->
 				</select></td>
 			</tr>
 			<tr>
@@ -46,12 +46,12 @@
 
 			<tr>
 				<td>{LANG.dis_date_re}(<span class="red">*</span>)</strong></td>
-				<td><input class="form-control w200 pull-left" value="{DATA.from_time}" type="text" id="from_time" name="from_time" readonly="readonly" /></td>
+				<td><input class="form-control w200 pull-left" value="{DATA.publtime}" type="text" id="publtime" name="publtime" readonly="readonly" /></td>
 			</tr>
 
 			<tr>
 				<td>{LANG.dis_code}(<span class="red">*</span>)</strong></td>
-				<td><input class="form-control w400" value="{DATA.code}" name="code" id="code" maxlength="100" /></td>
+				<td><input class="form-control w400" value="{DATA.number_dispatch}" name="code" id="code" maxlength="100" /></td>
 			</tr>
 
 			<tr>
@@ -105,12 +105,12 @@
 				<td><input class="form-control w200 pull-left" value="{DATA.date_die}" type="text" id="date_die" name="date_die"/></td>
 			</tr>
 			<tr>
-				<td>{LANG.dis_date_term_view}</td>
-				<td><input class="form-control w200 pull-left" value="{DATA.date_term_view}" type="text" id="date_term_view" name="date_term_view" readonly="readonly" /></td>
+				<td>{LANG.dis_term_view}</td>
+				<td><input class="form-control w200 pull-left" value="{DATA.term_view}" type="text" id="term_view" name="term_view" readonly="readonly" /></td>
 			</tr>
 			<tr>
 				<td>{LANG.dis_content}</td>
-				<td><textarea class="form-control" rows="8" name="content">{DATA.content}</textarea></td>
+				<td><textarea class="form-control" rows="8" name="content">{DATA.abstract}</textarea></td>
 			</tr>
 
 			<tr>
@@ -141,19 +141,19 @@
 			<tr>
 				<td>{LANG.dis_level0}</td>
 				<td>
-				<select class="form-control w200" name="levelid">
-					<!-- BEGIN: levelid -->
+				<select class="form-control w200" name="level_important">
+					<!-- BEGIN: level_important -->
 					<option value="{LISTLEVEL.id}"{LISTLEVEL.selected}>{LISTLEVEL.name}</option>
-					<!-- END: levelid -->
+					<!-- END: level_important -->
 				</select></td>
 			</tr>
 			<tr>
 				<td>{LANG.dis_reply0}</td>
 				<td>
-				<select class="form-control w200" name="replyid">
-					<!-- BEGIN: replyid -->
+				<select class="form-control w200" name="reply">
+					<!-- BEGIN: reply -->
 					<option value="{LISTREPLY.id}"{LISTREPLY.selected}>{LISTREPLY.name}</option>
-					<!-- END: replyid -->
+					<!-- END: reply -->
 				</select></td>
 			</tr>
 			<tr>
@@ -210,7 +210,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
-	$("#from_time,#date_iss, #date_first, #date_die,#date_term_view").datepicker({
+	$("#publtime,#date_iss, #date_first, #date_die,#term_view").datepicker({
 		showOn : "both",
 		dateFormat : "dd.mm.yy",
 		changeMonth : true,

@@ -18,12 +18,12 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     if (!$id) die('NO');
 
-    $query = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE id=" . $id;
+    $query = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
     $result = $db->query($query);
     $numrows = $result->rowCount();
 
     if ($numrows > 0) {
-        $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE id=" . $id;
+        $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
         $db->query($sql);
     }
 
@@ -40,7 +40,7 @@ $my_head .= "</script>\n";
 
 $from = $to = $type = 0;
 
-$sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_document WHERE id!=0";
+$sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id!=0";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 
 $listcats = nv_listcats(0);
@@ -51,7 +51,7 @@ if (empty($listcats)) {
 }
 
 $listdes = nv_listdes(0);
-/*if (empty($listdes)) {
+if (empty($listdes)) {
     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=departments_type&add=1");
     exit();
 }
@@ -68,7 +68,7 @@ if (empty($listtypes)) {
     exit();
 }
 
-$listsinger = nv_signerList(0);
+/*$listsinger = nv_signerList(0);
 
 if (empty($listsinger)) {
     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=singer&add");
@@ -159,7 +159,7 @@ if (!$all_page) {
     $error = 'Không có dữ liệu như bạn tìm';
 }
 
-$sql .= " ORDER BY from_time DESC";
+$sql .= " ORDER BY publtime DESC";
 
 $page = $nv_Request->get_int('page', 'get', 0);
 $per_page = 30;
@@ -180,25 +180,26 @@ while ($row = $query2->fetch()) {
         $edit = "&inter=1&id=" . $row['id'];
     }
 
-    if (strlen($row['content']) > 100) {
-        $content = nv_clean60($row['content'], 100);
+    if (strlen($row['abstract']) > 100) {
+        $content = nv_clean60($row['abstract'], 100);
 
     } else {
-        $content = $row['content'];
+        $content = $row['abstract'];
     }
+
     $array[$row['id']] = array( //
         'id' => (int) $row['id'], //
         'stt' => $i, //
+        'dis_type'=>$arr_dis_type[$row['idtype']]['name'],
         'title' => $row['title'], //
-        'code' => $row['code'], //
-        'cat' => $listcats[$row['catid']]['title'], //
-        'type' => $listtypes[$row['type']]['title'], //
-        'from_signer' => $listsinger[$row['from_signer']]['name'], //
-        'link_singer' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;signer=" . $row['from_signer'], //
+        'code' => $row['number_dispatch'], //
+        'cat' => $listcats[$row['idfield']]['title'], //
+        'type' => $listtypes[$row['idtype']]['title'], //
+        'from_signer' => $row['name_signer'], //
         'content' => $content, //
-        'link_type' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;type=" . $row['type'], //
-        'link_cat' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['catid'], //
-        'from_time' => nv_date('d.m.Y', $row['from_time']), //
+        'link_type' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;type=" . $row['idtype'], //
+        'link_cat' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['idfield'], //
+        'from_time' => nv_date('d.m.Y', $row['publtime']), //
         'status' => $arr_status[$row['status']]['name'], //
         'link_detail' => nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=detail/" . $row['alias'], true),
         'edit' => $edit

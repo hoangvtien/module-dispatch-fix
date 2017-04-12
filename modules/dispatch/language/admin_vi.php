@@ -78,6 +78,7 @@ $lang_module['add_dis_com'] = 'Nhập công văn đến';
 $lang_module['dis_go'] = 'Công văn đi';
 $lang_module['dis_inter'] = 'Công văn nội bộ';
 
+$lang_module['dispatch']='Công văn';
 $lang_module['dis_type'] = 'Chọn loại công văn đi hoặc đến';
 $lang_module['dis_type_1'] = 'Công văn đến';
 $lang_module['dis_type_2'] = 'Công văn đi';
