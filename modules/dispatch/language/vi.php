@@ -55,9 +55,12 @@ $lang_module['dis_status'] = 'Trạng thái';
 $lang_module['dis_person'] = 'Người ký';
 $lang_module['dis_de'] = 'Phòng ban nhận';
 
-$lang_module['dis_sta1'] = 'Chưa xử lý';
-$lang_module['dis_sta0'] = 'Đã xử lý';
+$lang_module['dis_sta0'] = 'Chưa xử lý';
+$lang_module['dis_sta1'] = 'Đã xử lý';
 $lang_module['dis_sta2'] = 'Để lưu';
+$lang_module['dis_sta3'] = 'Chưa gửi';
+$lang_module['dis_sta4'] = 'Đã gửi';
+$lang_module['dis_sta5'] = 'Đang xử lý';
 $lang_module['browse'] = 'Chọn file';
 $lang_module['add_button'] = 'Thêm file';
 $lang_module['dis_pe_re'] = 'Người nhận';

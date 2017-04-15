@@ -9,7 +9,7 @@
 
 			<tr>
 				<td width="200px"><strong>{LANG.dis_code}</strong></td>
-				<td> {ROW.code} </td>
+				<td> {ROW.number_dispatch} </td>
 			</tr>
 
 			<tr>

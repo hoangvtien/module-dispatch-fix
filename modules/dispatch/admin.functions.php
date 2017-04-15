@@ -26,7 +26,8 @@ $allow_func = array(
     'signer',
     'fields',
     'employee',
-    'type'
+    'type',
+    'set_todepartment'
 );
 global $arr_status,$arr_level_important,$arr_reply, $arr_dis_type;
 $arr_status = array(
@@ -297,6 +298,33 @@ function nv_setdes1($list2, $id, $list, $m = 0, $num = 0)
 }
 
 /**
+ * nv_listdecat()
+ *
+ * @param mixed $parentid
+ * @param integer $m
+ * @return
+ */
+function nv_listdecat($parentid, $m = 0)
+{
+    global $db, $module_data;
+
+    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_department_cat` ORDER BY weight ASC";
+    $result = $db->query($sql);
+    $list = array();
+    while ($row = $result->fetch()) {
+        $list[$row['id']] = array(
+            'id' => (int) $row['id'],
+            'title' => $row['title'],
+            'alias' => $row['alias'],
+            'weight' => (int) $row['weight'],
+            'selected' => $parentid == $row['id'] ? " selected=\"selected\"" : "",
+            'checked' => $parentid == $row['id'] ? " checked=\"checked\"" : ""
+        );
+    }
+    return $list;
+}
+
+/**
  * nv_listdes()
  *
  * @param mixed $parentid
@@ -311,7 +339,7 @@ function nv_listdes($parentid, $m = 0)
     $result = $db->query($sql);
     $list = array();
     while ($row = $result->fetch()) {
-        $list[$row['id']][] = array(
+        $list[$row['id']] = array(
             'id' => (int) $row['id'],
             'parentid' => (int) $row['depcatid'],
             'title' => $row['title'],
