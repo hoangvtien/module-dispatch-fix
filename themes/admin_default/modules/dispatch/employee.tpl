@@ -1,5 +1,6 @@
-<!-- BEGIN: main -->danh sách nhân viên
 
+
+<!-- BEGIN: userlist -->
 
 <div id="ablist" class="form-inline">
 	ID tài khoản: <input title="{LANG.search_id}" class="form-control txt" type="text" name="uid" id="uid" value="" maxlength="11" style="width:50px" />
@@ -14,7 +15,7 @@
 		$("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10));
 	});
 	$("input[name=searchUser]").click(function() {
-		nv_open_browse("http://congvan.my/admin/index.php?language=vi&nv=users&op=getuserid&area=uid&filtersql=vUhbjls6WmTsLw0O0U6SS159KPebUPco9n33OpAl-CgQz11v-IeXqNGZUXz3ZRyxUceWyba1wqGyFg6ye97zrhmhyiBL4iP5YX6RzRZJwP4,", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse("http://congvan.my/admin/index.php?language=vi&nv=users&op=getuserid&area=uid&filtersql={FILTERSQL},", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$("input[name=addUser]").click(function() {
@@ -37,5 +38,4 @@
 	});
 	//]]>
 </script>
-
-<!-- END: main -->
+<!-- END: userlist -->
