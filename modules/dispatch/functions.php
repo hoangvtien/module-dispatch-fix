@@ -24,6 +24,18 @@ $arr_status = array(
     '2' => array(
         'id' => '2',
         'name' => $lang_module['dis_sta2']
+    ),
+	'3' => array(
+        'id' => '3',
+        'name' => $lang_module['dis_sta3']
+    ),
+	'4' => array(
+        'id' => '4',
+        'name' => $lang_module['dis_sta4']
+    ),
+    '5' => array(
+        'id' => '5',
+        'name' => $lang_module['dis_sta5']
     )
 );
 

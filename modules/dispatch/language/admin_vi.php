@@ -138,6 +138,7 @@ $lang_module['error_org'] = 'Lỗi : Đơn vị nhận không được để tr�
 
 $lang_module['add_dis_inter'] = ' Nhập công văn nội bộ';
 $lang_module['from_depid'] = 'Tên phòng gửi';
+$lang_module['to_dep_catid'] = 'Loại phòng gửi';
 
 $lang_module['stt'] = 'STT';
 $lang_module['dis_from'] = 'Nơi gửi';

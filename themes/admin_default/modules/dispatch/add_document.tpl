@@ -14,7 +14,7 @@
 			<tr>
 				<td>{LANG.dis_type}</td>
 				<td>
-				<select class="form-control w200" name="type">
+				<select class="form-control w200 dis_type" name="type">
 					<!-- BEGIN: dis_type -->
 					<option value="{LISTDISTYPE.id}"{LISTDISTYPE.selected}>{LISTDISTYPE.name}</option>
 					<!-- END: dis_type -->
@@ -67,16 +67,43 @@
 				<td >{LANG.dis_to_org}</td>
 				<td><textarea class="form-control w400" name="to_org">{DATA.to_org}</textarea><span class="help-block">{LANG.org}</span></td>
 			</tr>
-
-			<!--<tr>
+				<tr <!-- BEGIN: dis_listdecat_none -->{CLASSLIST}<!-- END: dis_listdecat_none --> <!-- BEGIN: dis_listdecat_dis -->{CLASSLISTDIS}<!-- END: dis_listdecat_dis-->>
+				<td>{LANG.to_dep_catid}</td>
+				<td>
+				<select class="form-control w200 selectpicker to_depcatid " name="to_depcatid[]" multiple>
+					<!-- BEGIN: dis_listdecat -->
+					<option value="{LISTCATDIS.id}"{LISTCATDIS.selected}>{LISTCATDIS.title}</option>
+					<!-- END: dis_listdecat -->
+				</select></td>
+			</tr>
+			<tr <!-- BEGIN: dis_listdecat_none -->{CLASSLIST}<!-- END: dis_listdecat_none --> <!-- BEGIN: dis_listdecat_dis -->{CLASSLISTDIS}<!-- END: dis_listdecat_dis-->>
 				<td>{LANG.from_depid}</td>
 				<td>
-				<select class="form-control w200" name="from_depid">
-					<!-- BEGIN: from_depid -->
-					<!--<option value="{LISTDES.id}"{LISTDES.selected}>{LISTDES.name}</option>
-					<!-- END: from_depid -->
-				<!--</select></td>
-			</tr>-->
+				<div style="padding: 4px; height: 150px; width: 400px; background: none repeat scroll 0% 0% rgb(255, 255, 255); overflow: auto; text-align: left; border: 1px solid rgb(204, 204, 204);">
+					<div id="listdepid_0">
+					<table>
+						<tr>
+							<td>
+								<input id = "check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" />{LANG.dis_cho}
+							</td>
+						</tr>
+						<!-- BEGIN: loop -->
+						<tr>
+							<td>
+								<input name="deid[{ROW.id}]" value="{ROW.id}" type="checkbox" {ROW.checked} id="idcheck[]"/> {ROW.name}
+							</td>
+						</tr>
+						<!-- END: loop -->
+
+					</table>
+				</div>
+				<div id="listdepid_1">
+					&nbsp;
+				</div>
+
+				</div>
+				</td>
+			</tr>
 			<tr>
 				<td>{LANG.name_signer}(<span class="red">*</span>)</strong></td>
 				<td>
@@ -165,31 +192,6 @@
 					<!-- END: statusid -->
 				</select></td>
 			</tr>
-
-		<!--	<tr>
-				<td >{LANG.dis_de}</td>
-
-				<td>
-				<div style="padding: 4px; height: 150px; width: 400px; background: none repeat scroll 0% 0% rgb(255, 255, 255); overflow: auto; text-align: left; border: 1px solid rgb(204, 204, 204);">
-					<table>
-						<tr>
-							<td>
-								<input id = "check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" />{LANG.dis_cho}
-							</td>
-						</tr>
-						<!-- BEGIN: loop -->
-						<!--<tr>
-							<td>
-								<input name="deid[{ROW.id}]" value="{ROW.id}" type="checkbox" {ROW.checked} id="idcheck[]"/> {ROW.name}
-							</td>
-						</tr>
-						<!-- END: loop -->
-
-					<!--</table>
-
-				</div></td>
-			</tr>
-		-->
 			<tr>
 				<td>{LANG.who_view}</td>
 				<td>
@@ -219,5 +221,29 @@
 		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
+	$('.listdecat').css('display','none');
+	$( '.dis_type' ).change(function() {
+  	if($( this ).val()== 1) {
+  		$('.listdecat').css('display','');
+  		$('.listdecat_dis').css('display','');
+  	}
+  	else {
+  		$('.listdecat_dis').css('display','none');
+  	}
+  });
+
+  $( ".to_depcatid" ).change(function() {
+  	var listdepcatid = $( this ).val();
+  	$.get(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=set_todepartment&depcatid=' + listdepcatid, function(data) {
+		if (data != '') {
+			$('#listdepid_1').show();
+			$("#listdepid_1").html(data);
+			$('#listdepid_0').hide();
+		} else {
+			$('#listdepid_1').hide();
+		}
+	});
+  });
+
 </script>
 <!-- END: inter -->

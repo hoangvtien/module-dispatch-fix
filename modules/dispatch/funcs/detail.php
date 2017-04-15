@@ -36,11 +36,12 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
 
     $row['cat'] = $listcats[$row['idfield']]['title'];
     $row['status'] = $arr_status[$row['status']]['name'];
-    if ($row['from_time'] != 0) {
+    if ($row['publtime'] != 0) {
         $row['from_time'] = nv_date('d.m.Y', $row['publtime']);
     } else {
         $row['from_time'] = '';
     }
+	// /print_r($row['publtime']);die('pass');
     $row['date_iss'] = nv_date('d.m.Y', $row['date_iss']);
     $row['date_first'] = nv_date('d.m.Y', $row['date_first']);
     if ($row['from_time'] != 0) {
@@ -51,11 +52,11 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
 
     $row['type_title'] = $arr_type[$row['type']]['title'];
 
-    if ($row['from_depid'] != 0) {
+    /*if ($row['from_depid'] != 0) {
         $row['from_depid'] = $listdes[$row['from_depid']]['title'];
-    }
+    }*/
 
-    $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_document SET view=view+1 WHERE id=" . $id;
+    $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET view=view+1 WHERE id=" . $id;
 
     $db->query($query);
 
@@ -67,7 +68,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&" . NV_OP_VARIABLE . "=main&type=" . $row['type']);
-    $xtpl->assign('MODULE_URL2', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&" . NV_OP_VARIABLE . "=main&type=" . $row['type'] . "&catid=" . $row['catid']);
+    $xtpl->assign('MODULE_URL2', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&" . NV_OP_VARIABLE . "=main&type=" . $row['type'] . "&catid=" . $row['idfield']);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -75,7 +76,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_file);
     $xtpl->assign('OP', $op);
-    $xtpl->assign('detail_title', '<span style="font-weight: bold;">Công văn: ' . $row['code'] . '</span>');
+    $xtpl->assign('detail_title', '<span style="font-weight: bold;">Công văn: ' . $row['number_dispatch'] . '</span>');
     $xtpl->assign('template', $module_info['template']);
     $xtpl->assign('module', $module_name);
     $xtpl->assign('MODULE_LINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);

@@ -10,9 +10,9 @@
 
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
-$array['parentid'] = $catid = $array['type'] = $array['from_signer'] = $array['from_depid'] = 0;
-$arr_de['parentid'] = $array['statusid'] = $deid = $id = $array['level_important'] = $array['reply'] = 0;
-$arr_imgs = $arr_img = $list_de = $lis = $listde = array();
+$array['parentid'] = $catid = $array['type'] = $array['from_signer'] = $array['to_depid'] = $array['to_depcatid'] = 0;
+$arr_de['parentid'] = $array['statusid'] = $deid = $id = $array['level_important'] = $array['reply'] = $array['deid'] = 0;
+$arr_imgs = $arr_img = $list_de = $lis = $listde = $listdecat = $to_depcatid = $_to_depcatid = $arr_deid = $_arr_deid = array();
 $array['publtime'] = $array['term_view'] = $array['date_iss'] = $array['date_first'] = $array['date_die'] = $check = $to_person = $to_recipient = $error = '';
 $array['groups_view'] = 6;
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -27,9 +27,11 @@ if ($num > 0) {
     $array = $result->fetch();
     $array['parentid'] = $array['idfield'];
     $array['statusid'] = $array['status'];
+	$array['deid'] = $array['to_depid'];
+	$array['to_depcatid'] = $array['dep_catid'];
     $arr_imgs = explode(',', $array['attach_file']);
 
-    $sql1 = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE doid=" . $id;
+    /*$sql1 = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_de_do WHERE doid=" . $id;
 
     $result1 = $db->query($sql1);
     $nu = $result1->rowCount();
@@ -37,7 +39,7 @@ if ($num > 0) {
         while ($r = $result1->fetch()) {
             $listde[$r['deid']] = $r['deid'];
         }
-    }
+    }*/
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -51,12 +53,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
     $array['type'] = $nv_Request->get_int('type', 'post', 0);
 	$array['typeid'] = $nv_Request->get_int('typeid', 'post', 0);
-    $array['from_depid'] = $nv_Request->get_int('from_depid', 'post', 0);
     $array['title'] = $nv_Request->get_string('title', 'post', '', '');
     $array['alias'] = change_alias($array['title']);
     $array['code'] = $nv_Request->get_string('code', 'post', '');
 	$array['number_text_come']=$nv_Request->get_string('number_text_come', 'post', '');
     $array['to_org'] = $nv_Request->get_string('to_org', 'post', '');
+	$to_depcatid=$nv_Request->get_array('to_depcatid', 'post', array());
+	$array['to_depcatid'] = !empty($to_depcatid) ? implode(',', $to_depcatid ) : '';
+	$arr_deid=$nv_Request->get_array('deid', 'post', array());
+	$array['deid'] = !empty($arr_deid) ? implode(',', $arr_deid) : '';
     $array['from_org'] = $nv_Request->get_string('from_org', 'post', '');
     $array['from_signer'] = $nv_Request->get_int('from_signer', 'post', 0);
     $array['content'] = $nv_Request->get_string('content', 'post', '');
@@ -185,6 +190,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					date_die =" . $array['date_die'] . ",
 					from_org = " . $db->quote($array['from_org']) . ",
 					to_org = " . $db->quote($array['to_org']) . ",
+					dep_catid = " . $db->quote($array['to_depcatid']) . ",
+					to_depid = " . $db->quote($array['deid']) . ",
 					attach_file = " . $db->quote($array['file']) . ",
                     alias = '',
 					status = " . $array['statusid'] . ",
@@ -237,6 +244,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 					" . $array['date_die'] . ",
 					" . $db->quote($array['from_org']) . ",
 					" . $db->quote($array['to_org']) . ",
+					" . $db->quote($array['to_depcatid']) . ",
+					" . $db->quote($array['deid']) . ",
 					" . $db->quote($array['attach_file']) . ",
 					'',
 					" . $array['statusid'] . ",
@@ -276,23 +285,27 @@ $listdes = array(
         'checked' => ''
     )
 );
-/*$listdes = $listdes + nv_listdes($array['from_depid'], 0);
 
-$listsinger = nv_signerList($array['from_signer']);
-
-//$array['date_die'] = $array['date_die'] ? nv_date('d/m/Y', $array['date_die']) : '';
-
+$listdes = $listdes + nv_listdes($array['deid'], 0);
+$_arr_deid = explode(',', $array['deid']);
 foreach ($listdes as $li) {
     if ($li['id'] != 0) {
         $lis[] = array(
             'id' => (int) $li['id'],
             'alias' => $li['alias'],
             'name' => $li['title'],
-            'checked' => in_array($li['id'], $listde) ? 'checked="checked"' : ''
+            'checked' => in_array($li['id'], $_arr_deid) ? 'checked="checked"' : ''
         );
     }
 }
-*/
+
+//$listsinger = nv_signerList($array['from_signer']);
+
+//$array['date_die'] = $array['date_die'] ? nv_date('d/m/Y', $array['date_die']) : '';
+
+//Loại phòng ban
+$listdecat = $listdecat + nv_listdecat($array['to_depcatid'], 0);
+
 foreach ($arr_status as $a) {
     $as[] = array(
         'id' => $a['id'],
@@ -396,6 +409,23 @@ foreach ($dis_types as $dis_type) {
     $xtpl->assign('LISTDISTYPE', $dis_type);
     $xtpl->parse('inter.dis_type');
 }
+
+$to_depcatid = explode(',', $array['to_depcatid']);
+foreach ($listdecat as $cat) {
+	$cat['selected'] = in_array($cat['id'], $to_depcatid) ? " selected=\"selected\"" : "";
+    $xtpl->assign('LISTCATDIS', $cat);
+    $xtpl->parse('inter.dis_listdecat');
+}
+
+if(empty($id)) {
+	$xtpl->assign('CLASSLIST', 'class="listdecat"');
+	$xtpl->parse('inter.dis_listdecat_none');
+}
+else {
+	$xtpl->assign('CLASSLISTDIS', 'class="listdecat_dis"');
+	$xtpl->parse('inter.dis_listdecat_dis');
+}
+
 
 $groups_view = explode(',', $array['groups_view']);
 foreach ($groups_list as $_group_id => $_title) {
