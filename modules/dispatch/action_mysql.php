@@ -193,6 +193,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   date_die int(11) UNSIGNED NOT NULL DEFAULT '0',
   from_org varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   to_org MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL ,
+  to_depid VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Phòng ban nhận',
   attach_file varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   alias varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   status tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
