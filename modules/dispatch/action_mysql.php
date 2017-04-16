@@ -123,18 +123,19 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 //assignment
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_assignment (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `id_dispatch` int(11) UNSIGNED NOT NULL DEFAULT '0',
-  `id_department` mediumint(8) UNSIGNED NOT NULL,
-  `assingtime` int(11) UNSIGNED NOT NULL DEFAULT '0',
-  `completiontime` int(11) UNSIGNED NOT NULL DEFAULT '0',
-  `userid_command` mediumint(8) NOT NULL DEFAULT '0',
-  `userid_follow` mediumint(8) NOT NULL DEFAULT '0',
-  `userid_perform` mediumint(8) NOT NULL DEFAULT '0',
-  `work_content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `attach_file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
- KEY `id_dispatch` (`id_dispatch`,`id_department`)
+  id mediumint(8) NOT NULL AUTO_INCREMENT,
+  id_dispatch int(11) UNSIGNED NOT NULL DEFAULT '0',
+  id_department mediumint(8) UNSIGNED NOT NULL,
+  assingtime int(11) UNSIGNED NOT NULL DEFAULT '0',
+  completiontime int(11) UNSIGNED NOT NULL DEFAULT '0',
+  userid_command mediumint(8) NOT NULL DEFAULT '0',
+  userid_follow mediumint(8) NOT NULL DEFAULT '0',
+  userid_perform mediumint(8) NOT NULL DEFAULT '0',
+  work_content text COLLATE utf8mb4_unicode_ci NOT NULL,
+  result TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  attach_file varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+ KEY id_dispatch (id_dispatch,id_department)
 ) ENGINE=MyISAM;";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (
@@ -163,15 +164,14 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 ) ENGINE=MyISAM;";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_follow (
-   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_dispatch` int(11) NOT NULL,
-  `id_department` mediumint(8) NOT NULL,
-  `list_userid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `timeview` int(11) NOT NULL,
-  `list_hitstotal` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `result` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
- KEY id_dispatch (`id_dispatch`,`id_department`)
+   id mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_dispatch int(11) NOT NULL,
+  id_department mediumint(8) NOT NULL,
+  list_userid varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  timeview int(11) NOT NULL,
+  list_hitstotal varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (id),
+ KEY id_dispatch (id_dispatch,id_department)
 ) ENGINE=MyISAM;";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
