@@ -18,7 +18,7 @@ if( $listdecat )
 	$content = '<table>
 						<tr>
 							<td>
-								<input id = "check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, "idcheck[]", "check_all[]",this.checked);" />' . $lang_module['dis_cho'] . '
+								<input id = "check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, ' . $db->quote( 'idcheck[]' ) . ', ' . $db->quote( 'check_all[]' ) . ',' . $db->quote( 'this.checked' ) . ');" />' . $lang_module['dis_cho'] . '
 							</td>
 						</tr>';
 

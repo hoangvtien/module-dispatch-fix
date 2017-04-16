@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['main'] = 'Trang chính';
 $lang_module['config'] = 'Cấu hình';
 $lang_module['save'] = 'Lưu lại';
+$lang_module['dis_send'] = 'Gửi đi';
 
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['introduction'] = 'Giới thiệu';
@@ -213,3 +214,6 @@ $lang_module['detype_edit'] = 'Chỉnh sửa loại phòng ban';
 $lang_module['detype_list'] = 'Danh sách loại phòng ban';
 $lang_module['detype_del'] = 'Bạn có chắc chắn xóa loại phòng bàn này? Việc xóa loại phòng ban sẽ dẫn tới việc xóa toàn bộ các phòng ban, công văn cũng như các phần liên quan. Bạn có chắc chắn thực hiện?';
 $lang_module['employee_list'] = 'Danh sách nhân viên';
+
+$lang_module['dis_titile_email'] = 'Thông báo xem công văn';
+$lang_module['dis_content_email'] = '<strong>Mời bạn xem công văn bằng cách nhấn <a href="%s">vào đây</a></strong>';

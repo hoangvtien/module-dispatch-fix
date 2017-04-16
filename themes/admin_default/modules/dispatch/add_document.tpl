@@ -84,7 +84,7 @@
 					<table>
 						<tr>
 							<td>
-								<input id = "check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" />{LANG.dis_cho}
+								<input  type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" />{LANG.dis_cho}
 							</td>
 						</tr>
 						<!-- BEGIN: loop -->
@@ -203,7 +203,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" /></td>
+				<td colspan="2">
+					<input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" />
+					<input class="btn btn-primary" type="submit" name="send" value="{LANG.dis_send}" />
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -244,6 +247,5 @@
 		}
 	});
   });
-
 </script>
 <!-- END: inter -->
