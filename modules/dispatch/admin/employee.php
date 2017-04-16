@@ -19,12 +19,39 @@ if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $array = array();
 $error = "";
+// Danh sach nhân viên cảu phòng
+if ($nv_Request->isset_request('deid', 'get')) {
+    $group_id = $nv_Request->get_int('deid', 'get', 0);
+   /* if (! isset($groupsList[$group_id]) or ! ($group_id < 4 or $group_id > 9)) {
+        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+        die();
+    }*/
+ $xtpl = new XTemplate("employee.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
+    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;add=1");
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('DATA', $array);
+    $filtersql = ' userid NOT IN (SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user WHERE iddepart=' . $group_id . ')';
+    /*if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
+        $filtersql .= ' AND idsite=' . $global_config['idsite'];
+    }*/
+    $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
+    $xtpl->assign('GID', $group_id);
 
+    if ($group_id > 9) {
+        $xtpl->parse('userlist.adduser');
+    }
+    $xtpl->parse('userlist');
+    $contents = $xtpl->text('userlist');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
 //them chu de
 
     $page_title = $lang_module['employee_list'];
     $is_error = false;
-    if ($nv_Request->isset_request('submit', 'post')) {
+   /* if ($nv_Request->isset_request('submit', 'post')) {
         $array['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
         $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
         $array['alias'] = $nv_Request->get_title('alias', 'post', '');
@@ -359,4 +386,4 @@ $contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
-include NV_ROOTDIR . '/includes/footer.php';
+include NV_ROOTDIR . '/includes/footer.php';*/
