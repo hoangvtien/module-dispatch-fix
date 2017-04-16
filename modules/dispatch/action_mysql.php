@@ -124,16 +124,16 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 //assignment
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_assignment (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
-  id_dispatch int(11) UNSIGNED NOT NULL DEFAULT '0',
-  id_department mediumint(8) UNSIGNED NOT NULL,
-  assingtime int(11) UNSIGNED NOT NULL DEFAULT '0',
-  completiontime int(11) UNSIGNED NOT NULL DEFAULT '0',
-  userid_command mediumint(8) NOT NULL DEFAULT '0',
-  userid_follow mediumint(8) NOT NULL DEFAULT '0',
-  userid_perform mediumint(8) NOT NULL DEFAULT '0',
-  work_content text COLLATE utf8mb4_unicode_ci NOT NULL,
-  result TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  attach_file varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  id_dispatch int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Id công văn',
+  id_department mediumint(8) UNSIGNED NOT NULL COMMENT 'Id phòng ban',
+  assingtime int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Ngày giao',
+  completiontime int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Thời gian hoàn thành',
+  userid_command mediumint(8) NOT NULL DEFAULT '0' COMMENT 'Người chỉ đạo',
+  userid_follow mediumint(8) NOT NULL DEFAULT '0' COMMENT 'Người theo dõi',
+  userid_perform mediumint(8) NOT NULL DEFAULT '0' COMMENT 'Người thực hiện',
+  work_content text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nội dung công việc',
+  result TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Kết quả',
+  attach_file varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Đính kèm tệp tin',
   PRIMARY KEY (id),
  KEY id_dispatch (id_dispatch,id_department)
 ) ENGINE=MyISAM;";
@@ -165,11 +165,11 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_follow (
    id mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_dispatch int(11) NOT NULL,
-  id_department mediumint(8) NOT NULL,
-  list_userid varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  timeview int(11) NOT NULL,
-  list_hitstotal varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  id_dispatch int(11) NOT NULL COMMENT 'id công văn',
+  id_department mediumint(8) NOT NULL COMMENT 'Id phòng ban',
+  list_userid varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'List id user xem công văn',
+  list_timeview MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'List thời gian xem',
+  list_hitstotal varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'List lịch sử xem',
   PRIMARY KEY (id),
  KEY id_dispatch (id_dispatch,id_department)
 ) ENGINE=MyISAM;";
