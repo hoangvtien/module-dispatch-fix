@@ -59,7 +59,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
      }*/
 
     //Quyền xem
-    if (($row['groups_view'] != 0 and !in_array($row['groups_view'], $user_info['in_groups']) and $row['level_important'] == 2) or $row['status_id'] == 3) {
+    if (($row['groups_view'] != 6 and !in_array($row['groups_view'], $user_info['in_groups']) and $row['level_important'] == 2) or $row['status_id'] == 3) {
         Header("Location: " . nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, 1));
         exit();
     }
@@ -68,7 +68,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
 
     $db->query($query);
 
-    if ($row['level_important'] == 2) {
+    if ($row['level_important'] == 2 and !empty($user_info)) {
         $arr_userid = array();
         //update người xem
         $result_follow = $db->query('SELECT id,list_userid  FROM ' . NV_PREFIXLANG . '_' . $module_data . '_follow WHERE id_dispatch = ' . $id . ' AND FIND_IN_SET(' . $user_info['userid'] . ', list_userid) ');
