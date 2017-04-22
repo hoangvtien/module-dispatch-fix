@@ -6,6 +6,10 @@
 				<td width="200px"><strong>{LANG.dis}</strong></td>
 				<td><strong><a href="{TYPELINK}">{TYPENAME}</a> </strong></td>
 			</tr>
+			<tr>
+				<td width="200px"><strong>{LANG.dis_name}</strong></td>
+				<td>{ROW.title}</td>
+			</tr>
 
 			<tr>
 				<td width="200px"><strong>{LANG.dis_code}</strong></td>
@@ -24,12 +28,6 @@
 			<tr>
 				<td><strong> {LANG.dis_to_org}</strong></td>
 				<td> {ROW.to_org} </td>
-			</tr>
-			<tr>
-				<td><strong>{LANG.dis_de}</strong></td>
-				<td><!-- BEGIN: depid --> - {dis_de}
-				<br />
-				<!-- END: depid --></td>
 			</tr>
 
 			<tr>
@@ -58,6 +56,7 @@
 			</tr>
 			<!-- END: taifile -->
 
+
 			<tr>
 				<td><strong>{LANG.dis_content}</strong></td>
 				<td>&nbsp;</td>
@@ -65,6 +64,15 @@
 
 			<tr>
 				<td colspan="2" style="text-align: justify;"> {ROW.abstract} </td>
+			</tr>
+
+			<tr>
+				<td><strong>{LANG.dis_note}</strong></td>
+				<td>&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" style="text-align: justify;"> {ROW.note} </td>
 			</tr>
 		</tbody>
 	</table>

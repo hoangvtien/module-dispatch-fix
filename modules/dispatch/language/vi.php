@@ -54,6 +54,7 @@ $lang_module['dis_dis'] = 'Nội dung';
 $lang_module['dis_status'] = 'Trạng thái';
 $lang_module['dis_person'] = 'Người ký';
 $lang_module['dis_de'] = 'Phòng ban nhận';
+$lang_module['dis_note'] = 'Ghi chú';
 
 $lang_module['dis_sta0'] = 'Chưa xử lý';
 $lang_module['dis_sta1'] = 'Đã xử lý';
