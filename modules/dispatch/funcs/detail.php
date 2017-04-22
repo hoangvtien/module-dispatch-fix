@@ -8,7 +8,8 @@
  * @Createdate Tue, 19 Jul 2011 09:07:26 GMT
  */
 
-if (!defined('NV_IS_MOD_CONGVAN')) die('Stop!!!');
+if (!defined('NV_IS_MOD_CONGVAN'))
+    die('Stop!!!');
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
@@ -41,7 +42,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
     } else {
         $row['from_time'] = '';
     }
-	// /print_r($row['publtime']);die('pass');
+
     $row['date_iss'] = nv_date('d.m.Y', $row['date_iss']);
     $row['date_first'] = nv_date('d.m.Y', $row['date_first']);
     if ($row['from_time'] != 0) {
@@ -53,8 +54,14 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
     $row['type_title'] = $arr_type[$row['type']]['title'];
 
     /*if ($row['from_depid'] != 0) {
-        $row['from_depid'] = $listdes[$row['from_depid']]['title'];
-    }*/
+     $row['from_depid'] = $listdes[$row['from_depid']]['title'];
+     }*/
+
+    //Quyền xem
+    if ($row['groups_view'] != 0 and !in_array($row['groups_view'], $user_info['in_groups'])) {
+        Header("Location: " . nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, 1));
+        exit();
+    }
 
     $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET view=view+1 WHERE id=" . $id;
 
