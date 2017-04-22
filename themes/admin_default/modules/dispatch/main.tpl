@@ -47,7 +47,7 @@
 				<th> {LANG.cat_parent} </th>
 				<th> {LANG.dis_person} </th>
 				<th class="text-center"> {LANG.dis_date_re} </th>
-				<th class="text-center"> {LANG.detail} </th>
+				<th class="text-center"> {LANG.dis_status} </th>
 				<th class="text-center"> {LANG.feature} </th>
 
 			</tr>
@@ -57,16 +57,16 @@
 			<tr>
 				<td class="text-center"> {ROW.stt} </td>
 				<td> {ROW.dis_type} </td>
-				<td> {ROW.title0} </td>
+				<td><a href="{ROW.link_detail}" target="_blank"> {ROW.title0} </a> </td>
 				<td> {ROW.code} </td>
 				<td><a href="{ROW.link_type}">{ROW.type}</a></td>
 				<td><a href="{ROW.link_cat}">{ROW.cat}</a></td>
 				<td><a href="{ROW.link_singer}">{ROW.from_signer}</a></td>
 				<td class="text-center"> {ROW.from_time} </td>
-				<td class="text-center"><a href="{ROW.link_detail}" target="_blank"><em class="fa fa-search fa-lg">&nbsp;</em></a></td>
+				<td class="text-center">{ROW.status}</td>
 				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp; -
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_pro_del({ROW.id});">{GLANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{EDIT_URL}" {DISABLED_DIS}>{GLANG.edit}</a> &nbsp;&nbsp; -
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_pro_del({ROW.id});" {DISABLED_DIS}>{GLANG.delete}</a>
 				</td>
 
 			</tr>
@@ -94,5 +94,8 @@
 		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
+	 $('.disabled').click(function(e){
+     e.preventDefault();
+  });
 </script>
 <!-- END: main -->

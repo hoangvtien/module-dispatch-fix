@@ -21,3 +21,7 @@ a.button1 {
     text-align: center;
     text-decoration: none;
 }
+a.disabled {
+   pointer-events: none;
+   cursor: not-allowed;
+}

@@ -37,6 +37,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
 
     $row['cat'] = $listcats[$row['idfield']]['title'];
     $row['status'] = $arr_status[$row['status']]['name'];
+    $row['status_id'] = $row['status'];
     if ($row['publtime'] != 0) {
         $row['from_time'] = nv_date('d.m.Y', $row['publtime']);
     } else {
@@ -58,7 +59,7 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
      }*/
 
     //Quyền xem
-    if ($row['groups_view'] != 0 and !in_array($row['groups_view'], $user_info['in_groups'])) {
+    if (($row['groups_view'] != 0 and !in_array($row['groups_view'], $user_info['in_groups']) and $row['level_important'] == 2) or $row['status_id'] == 3) {
         Header("Location: " . nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, 1));
         exit();
     }
@@ -66,6 +67,33 @@ if (isset($array_op[1]) and preg_match("/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/", $array
     $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET view=view+1 WHERE id=" . $id;
 
     $db->query($query);
+
+    if ($row['level_important'] == 2) {
+        $arr_userid = array();
+        //update người xem
+        $result_follow = $db->query('SELECT id,list_userid  FROM ' . NV_PREFIXLANG . '_' . $module_data . '_follow WHERE id_dispatch = ' . $id . ' AND FIND_IN_SET(' . $user_info['userid'] . ', list_userid) ');
+	    while ($row_follow = $result_follow->fetch()) {
+    		$arr_userid = explode(',', $row_follow['list_userid']);
+            $arr_timeview = $arr_list_hitstotal = array();
+			$list_timeview = $list_hitstotal = '';
+
+            foreach ($arr_userid as $user) {
+                if ($user_info['userid'] == $user) {
+                    $arr_timeview[] = NV_CURRENTTIME;
+                    $arr_list_hitstotal[] = $user;
+                } else {
+					$arr_timeview[] = 0;
+                    $arr_list_hitstotal[] = 0;
+                }
+            }
+			$list_timeview = implode(',', $arr_timeview);
+			$list_hitstotal = implode(',', $arr_list_hitstotal);
+
+            $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_follow SET list_timeview = '.$db->quote($list_timeview).', list_hitstotal = '.$db->quote($list_hitstotal).' WHERE id=' . $row_follow['id'];
+
+            $db->query($query);
+        }
+    }
 
     $listtypes = nv_listtypes($row['type']);
 

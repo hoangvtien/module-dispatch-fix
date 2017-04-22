@@ -8,15 +8,18 @@
  * @Createdate Tue, 19 Jul 2011 09:07:26 GMT
  */
 
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN'))
+    die('Stop!!!');
 
 //Delete link
 if ($nv_Request->isset_request('del', 'post')) {
-    if (!defined('NV_IS_AJAX')) die('Wrong URL');
+    if (!defined('NV_IS_AJAX'))
+        die('Wrong URL');
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    if (!$id) die('NO');
+    if (!$id)
+        die('NO');
 
     $query = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
     $result = $db->query($query);
@@ -70,11 +73,11 @@ if (empty($listtypes)) {
 
 /*$listsinger = nv_signerList(0);
 
-if (empty($listsinger)) {
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=singer&add");
-    exit();
-}
-*/
+ if (empty($listsinger)) {
+ Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=singer&add");
+ exit();
+ }
+ */
 $page_title = $lang_module['table'];
 
 if ($nv_Request->isset_request("type", "get")) {
@@ -85,7 +88,7 @@ if ($nv_Request->isset_request("type", "get")) {
     }
 
     $page_title = sprintf($lang_module['cv_list_by_type'], $listtypes[$type]['title']);
-    $sql .= " AND type=" . $type;
+    $sql .= " AND idtype=" . $type;
     $base_url .= "&amp;type=" . $type;
 }
 
@@ -127,8 +130,7 @@ if ($nv_Request->isset_request("from", "get")) {
     if ($from != 0) {
         //die($year.'');
 
-
-        $sql .= " AND from_time >= " . $from;
+        $sql .= " AND publtime >= " . $from;
         $base_url .= "&amp;from =" . $from;
     }
 }
@@ -144,14 +146,12 @@ if ($nv_Request->isset_request("to", "get")) {
     if ($to != 0) {
         //die($year.'');
 
-
-        $sql .= " AND from_time <= " . $to;
+        $sql .= " AND publtime <= " . $to;
         $base_url .= "&amp;to=" . $to;
     }
 }
 
 $sql1 = "SELECT COUNT(*) " . $sql;
-
 $result1 = $db->query($sql1);
 $all_page = $result1->fetchColumn();
 
@@ -187,10 +187,10 @@ while ($row = $query2->fetch()) {
         $content = $row['abstract'];
     }
 
-    $array[$row['id']] = array( //
-        'id' => (int) $row['id'], //
+    $array[$row['id']] = array(//
+        'id' => (int)$row['id'], //
         'stt' => $i, //
-        'dis_type'=>$arr_dis_type[$row['idtype']]['name'],
+        'dis_type' => $arr_dis_type[$row['idtype']]['name'],
         'title' => $row['title'], //
         'code' => $row['number_dispatch'], //
         'cat' => $listcats[$row['idfield']]['title'], //
@@ -200,7 +200,8 @@ while ($row = $query2->fetch()) {
         'link_type' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;type=" . $row['idtype'], //
         'link_cat' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['idfield'], //
         'from_time' => nv_date('d.m.Y', $row['publtime']), //
-        'status' => $arr_status[$row['status']]['name'], //
+        'status' => $arr_status[$row['status']]['name'],
+        'status_id' => $row['status'],
         'link_detail' => nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . "=" . $module_name . "&amp;op=detail/" . $row['alias'], true),
         'edit' => $edit
     );
@@ -225,6 +226,11 @@ if (!empty($array)) {
     $a = 0;
     foreach ($array as $row) {
         $row['title0'] = nv_clean60($row['title'], 70);
+        if ($row['status_id'] != 3) {
+            $xtpl->assign('DISABLED_DIS', 'class="disabled"');
+        } else {
+            $xtpl->assign('DISABLED_DIS', '');
+        }
         $xtpl->assign('ROW', $row);
         $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;&op=add_document" . $row['edit']);
 
