@@ -34,6 +34,8 @@ $lang_module['feature'] = 'Chức năng';
 $lang_module['cat_active'] = 'Hoạt động';
 $lang_module['cat_del'] = 'Bạn có chắc chắn xóa chủ đề này? Việc xóa chủ đề sẽ dẫn tới việc xóa toàn bộ các chủ đề, công văn cũng như các phần liên quan. Bạn có chắc chắn thực hiện?';
 
+$lang_module['dispatch_follow'] = 'Theo dõi công văn';
+
 $lang_module['cat_list'] = 'Danh sách chủ đề';
 $lang_module['cat'] = 'Chủ đề';
 $lang_module['table_caption1'] = 'Danh sách các chủ đề là chủ đề chính';

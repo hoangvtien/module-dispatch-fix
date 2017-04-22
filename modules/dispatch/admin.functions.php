@@ -11,12 +11,14 @@
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) die('Stop!!!');
 
 $submenu['add_document'] = $lang_module['add_document'];
+$submenu['dispatch_follow'] = $lang_module['dispatch_follow'];
 $submenu['cat'] = $lang_module['cat'];
 $submenu['type'] = $lang_module['type'];
-$submenu['signer'] = $lang_module['signer'];
+//$submenu['signer'] = $lang_module['signer'];
 $submenu['departments'] = $lang_module['departments'];
 $submenu['departments_type'] = $lang_module['departments_type'];
 $submenu['fields'] = $lang_module['fields'];
+
 $allow_func = array(
     'main',
     'departments',
@@ -27,7 +29,8 @@ $allow_func = array(
     'fields',
     'employee',
     'type',
-    'set_todepartment'
+    'set_todepartment',
+    'dispatch_follow'
 );
 global $arr_status,$arr_level_important,$arr_reply, $arr_dis_type;
 $arr_status = array(

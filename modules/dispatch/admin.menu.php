@@ -11,9 +11,10 @@
 if (!defined('NV_ADMIN')) die('Stop!!!');
 
 $submenu['add_document'] = $lang_module['add_document'];
+$submenu['dispatch_follow'] = $lang_module['dispatch_follow'];
 $submenu['cat'] = $lang_module['cat'];
 $submenu['type'] = $lang_module['type'];
-$submenu['signer'] = $lang_module['signer'];
+//$submenu['signer'] = $lang_module['signer'];
 $submenu['departments'] = $lang_module['departments'];
 $submenu['departments_type'] = $lang_module['departments_type'];
 $submenu['fields'] = $lang_module['fields'];
