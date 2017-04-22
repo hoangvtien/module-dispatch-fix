@@ -271,7 +271,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) || $nv_Request->isset_request
 				if( $db->query( $sql ) )
 				{
 					$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-                		alias=" . $db->quote( $array['alias'] . "-" . $id ) . " WHERE id=" . $id;
+                		alias=" . $db->quote( $array['alias'] . "-" . $id ) . ", status = 4 WHERE id=" . $id;
 					$db->query( $query );
 
 					if( $nv_Request->isset_request( 'send', 'post' ) )
