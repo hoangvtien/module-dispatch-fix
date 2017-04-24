@@ -219,3 +219,9 @@ $lang_module['employee_list'] = 'Danh sách nhân viên';
 
 $lang_module['dis_titile_email'] = 'Thông báo xem công văn';
 $lang_module['dis_content_email'] = '<strong>Mời bạn xem công văn bằng cách nhấn <a href="%s">vào đây</a></strong>';
+
+$lang_module['dis_expired'] = 'Hết hạn';
+$lang_module['dis_unexpired'] = 'Chưa hết hạn';
+$lang_module['viewers'] = 'Họ và tên';
+$lang_module['viewers_time'] = 'Thời gian xem';
+$lang_module['viewers_status'] = 'Trạng thái';
