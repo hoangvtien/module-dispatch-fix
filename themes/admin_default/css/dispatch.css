@@ -25,3 +25,8 @@ a.disabled {
    pointer-events: none;
    cursor: not-allowed;
 }
+#ablist {
+    margin: 5px;
+    padding: 10px;
+    background: #F2F2F2;
+}
