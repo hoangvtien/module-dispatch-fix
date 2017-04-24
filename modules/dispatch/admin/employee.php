@@ -26,7 +26,7 @@ if ($nv_Request->isset_request('deid', 'get')) {
 
 	$sql = 'SELECT username, first_name, last_name, email, '. NV_USERS_GLOBALTABLE . '.userid, office FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user, ' . NV_USERS_GLOBALTABLE . ' WHERE ' . NV_USERS_GLOBALTABLE . '.userid=' . NV_PREFIXLANG . '_' . $module_data . '_user.userid AND iddepart =' . $deid;
    	$result = $db->query($sql);
-
+	$office = array($lang_module['paper_handling'],$lang_module['manage'],$lang_module['other_emplyee']);
 	while($row = $result->fetch()){
 		$array_data[] = array(
                 'username' => $row['username'],
@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('deid', 'get')) {
                 'email' => $row['email'],
                 'link' => '',
                 'userid' => $row['userid'],
-                'office' => $row['office']
+                'office' => $office[$row['office']]
             );
 	}
 
@@ -106,7 +106,14 @@ if ($nv_Request->isset_request('deid, uid', 'post,get')) {
 
     die('OK');
 }
-
+if ($nv_Request->isset_request('deid,exclude', 'post,get')) {
+    $deid = $nv_Request->get_int('deid', 'post', 0);
+    $uid = $nv_Request->get_int('exclude', 'post', 0);
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user WHERE iddepart=' . $deid . ' AND userid=' . $uid;
+	$db->query($sql);
+	nv_insert_logs(NV_LANG_DATA, $module_data, "delete employee", '', $admin_info['userid'], '');
+	die('OK');
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
