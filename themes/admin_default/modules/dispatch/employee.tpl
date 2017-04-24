@@ -16,7 +16,6 @@
     	 <input class="btn btn-primary" name="addUser" type="submit" value="{LANG.addemployee}" />
     </div>
 </div>
-
 <div id="id_members">
 <div class="table-responsive">
 <table class="table table-striped table-bordered table-hover">
@@ -76,12 +75,15 @@
 			url : "{MODULE_URL}",
 			data : "deid={GID}&uid=" + a + "&office=" + b + "&rand=" + nv_randomPassword(10),
 			success : function(a) {
-				location.reload();
-				a == "OK" ? ($("#ablist input[name=uid]").val(""), $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))) : alert(a);
+				//a == "OK" ? ($("#ablist input[name=uid]").val(""), $("div#pageContent").load("{MODULE_URL}&deid={GID}&random=" + nv_randomPassword(10))) : alert(a);
 			}
 		});
+		location.reload();
 		return !1;
 	});
 	//]]>
 </script>
 <!-- END: userlist -->
+<!-- BEGIN: user -->
+
+<!-- END: user -->

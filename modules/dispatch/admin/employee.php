@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('deid', 'get')) {
     $deid= $nv_Request->get_int('deid', 'get', 0);
 
 	$sql = 'SELECT username, first_name, last_name, email, '. NV_USERS_GLOBALTABLE . '.userid, office FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user, ' . NV_USERS_GLOBALTABLE . ' WHERE ' . NV_USERS_GLOBALTABLE . '.userid=' . NV_PREFIXLANG . '_' . $module_data . '_user.userid AND iddepart =' . $deid;
-   $result = $db->query($sql);
+   	$result = $db->query($sql);
 
 	while($row = $result->fetch()){
 		$array_data[] = array(
@@ -55,6 +55,29 @@ if ($nv_Request->isset_request('deid', 'get')) {
     $xtpl->parse('userlist');
     $contents = $xtpl->text('userlist');
 }
+/*if ($nv_Request->isset_request('listUsers', 'get')) {
+	 $deid= $nv_Request->get_int('listUsers', 'get', 0);
+	$sql = 'SELECT username, first_name, last_name, email, '. NV_USERS_GLOBALTABLE . '.userid, office FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user, ' . NV_USERS_GLOBALTABLE . ' WHERE ' . NV_USERS_GLOBALTABLE . '.userid=' . NV_PREFIXLANG . '_' . $module_data . '_user.userid AND iddepart =' . $deid;
+   	$result = $db->query($sql);
+
+	while($row = $result->fetch()){
+		$array_data[] = array(
+                'username' => $row['username'],
+                'fullname' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
+                'email' => $row['email'],
+                'link' => '',
+                'userid' => $row['userid'],
+                'office' => $row['office']
+            );
+	}
+	foreach($array_data as $data){
+		$xtpl->assign('DATA', $data);
+		$xtpl->parse('user.data');
+		$xtpl->parse('user');
+    	$xtpl->out('user');
+    	exit();
+	}
+}*/
 
     $page_title = $lang_module['employee_list'];
     $is_error = false;
