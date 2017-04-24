@@ -28,3 +28,8 @@ a.disabled {
 .col-md-6 {
 	margin-bottom: 5px;
 }
+#ablist {
+    margin: 5px;
+    padding: 10px;
+    background: #F2F2F2;
+}
