@@ -22,6 +22,7 @@ $error = "";
 
 // Danh sach nhân viên của phòng
 if ($nv_Request->isset_request('deid', 'get')) {
+	$array_data = array();
     $deid= $nv_Request->get_int('deid', 'get', 0);
 
 	$sql = 'SELECT username, first_name, last_name, email, '. NV_USERS_GLOBALTABLE . '.userid, office FROM ' . NV_PREFIXLANG . '_' . $module_data . '_user, ' . NV_USERS_GLOBALTABLE . ' WHERE ' . NV_USERS_GLOBALTABLE . '.userid=' . NV_PREFIXLANG . '_' . $module_data . '_user.userid AND iddepart =' . $deid;
